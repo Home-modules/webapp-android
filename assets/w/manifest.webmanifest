@@ -1,0 +1,65 @@
+{
+  "short_name": "Home_modules",
+  "name": "Home_modules",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "favicon.ico",
+      "sizes": "256x256",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "icon6.png",
+      "sizes": "6x6",
+      "type": "image/png"
+    },
+    {
+      "src": "icon64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "icon1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-maskable.ico",
+      "sizes": "256x256",
+      "type": "image/x-icon",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-maskable8.png",
+      "sizes": "8x8",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Home",
+      "url": "home",
+      "icons": [{ "src": "/shortcut-home.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Settings",
+      "url": "settings",
+      "icons": [{ "src": "/shortcut-settings.png", "sizes": "192x192" }]
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#0c0"
+}
