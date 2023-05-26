@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
-void main() => runApp(const TextFieldExampleApp());
+void main() => runApp(const MyApp());
+String? hubip;
 
-class TextFieldExampleApp extends StatelessWidget {
-  const TextFieldExampleApp({super.key});
-
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: TextFieldExample(),
+      home: HomePage(),
     );
   }
 }
 
-class TextFieldExample extends StatefulWidget {
-  const TextFieldExample({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<TextFieldExample> createState() => _TextFieldExampleState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _TextFieldExampleState extends State<TextFieldExample> {
+class _HomePageState extends State<HomePage> {
   late TextEditingController _controller;
 
   @override
@@ -52,7 +53,12 @@ class _TextFieldExampleState extends State<TextFieldExample> {
           ),
           controller: _controller,
           onSubmitted: (String value) async {
-            await showDialog<void>(
+            hubip = value;
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const WebApp()),
+            );
+            /*await showDialog<void>(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
@@ -70,9 +76,25 @@ class _TextFieldExampleState extends State<TextFieldExample> {
                 );
               },
             );
+            */
           },
         ),
       ),
     ));
+  }
+}
+
+class WebApp extends StatelessWidget {
+  const WebApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    print('http://$hubip\:3000');
+    return Scaffold(
+        body: SafeArea(
+            child: WebViewPlus(
+      initialUrl: 'http://$hubip\:3000',
+      javascriptMode: JavascriptMode.unrestricted,
+    )));
   }
 }
