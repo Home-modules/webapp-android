@@ -3,6 +3,8 @@ import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 void main() => runApp(const MyApp());
 String? hubip;
+String? hubport;
+bool? isHTTPS = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -24,6 +26,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late TextEditingController _controller;
 
+  final myController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -33,54 +37,101 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _controller.dispose();
+    myController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.blueAccent;
+      }
+      return Colors.blueAccent;
+    }
+
     return Scaffold(
         body: Center(
-      child: SizedBox(
-        width: 250,
-        child: TextField(
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Hub IP',
-            hintText: 'Enter Hub IP Address',
-            hintStyle: TextStyle(fontSize: 15),
-            icon: Icon(Icons.account_tree_sharp),
-            iconColor: Colors.blueAccent,
-          ),
-          controller: _controller,
-          onSubmitted: (String value) async {
-            hubip = value;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const WebApp()),
-            );
-            /*await showDialog<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Test Pop-up'),
-                  content: Text(
-                      'You typed "$value", which has length ${value.characters.length}.'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
+            child: Wrap(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: SizedBox(
+            width: 200,
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Hub IP',
+                hintText: 'Enter Hub IP',
+                hintStyle: TextStyle(fontSize: 15),
+                icon: Icon(Icons.account_tree_sharp),
+                iconColor: Colors.blueAccent,
+              ),
+              controller: _controller,
+              onSubmitted: (String value) async {
+                hubip = value;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const WebApp()),
                 );
               },
-            );
-            */
-          },
+            ),
+          ),
         ),
-      ),
-    ));
+        Padding(
+          padding: const EdgeInsets.all(15),
+          child: SizedBox(
+            width: 130,
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Hub Port',
+                hintText: 'Enter Hub Port',
+                hintStyle: TextStyle(fontSize: 15),
+              ),
+              controller: myController,
+            ),
+          ),
+        ),
+        Center(
+            child: Row(children: [
+          Center(
+              child: Checkbox(
+            checkColor: Colors.white,
+            fillColor: MaterialStateProperty.resolveWith(getColor),
+            value: isHTTPS,
+            onChanged: (bool? value) {
+              isHTTPS = value;
+              setState(() {
+                isHTTPS = value!;
+              });
+            },
+          )),
+          Text('Is server HTTPS?')
+        ])),
+        Center(
+          child: SizedBox(
+            width: 130,
+            child: ElevatedButton(
+              child: Text('Go'),
+              onPressed: () {
+                hubip = _controller.text;
+                hubport = myController.text;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const WebApp()),
+                );
+              },
+            ),
+          ),
+        )
+      ],
+    )));
   }
 }
 
@@ -89,11 +140,16 @@ class WebApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('http://$hubip\:3000');
+    String? httpState;
+    if (isHTTPS == true)
+      httpState = "https";
+    else
+      httpState = "http";
+    print('${httpState}://${hubip}:${hubport}');
     return Scaffold(
         body: SafeArea(
             child: WebViewPlus(
-      initialUrl: 'http://$hubip\:3000',
+      initialUrl: '${httpState}://${hubip}:${hubport}',
       javascriptMode: JavascriptMode.unrestricted,
     )));
   }
