@@ -1,4 +1,4 @@
-package com.example.namizoon
+package com.homemodules
 
 import io.flutter.embedding.android.FlutterActivity
 
