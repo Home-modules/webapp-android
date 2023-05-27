@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPreferences? prefs;
+void loadPrefs() async {
+  prefs = await SharedPreferences.getInstance();
+}
 
 void main() => runApp(const MyApp());
-String? hubip;
-String? hubport;
-bool? isHTTPS = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    loadPrefs();
+    return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primaryColor: const Color.fromARGB(255, 33, 71, 92),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        backgroundColor: Color.fromARGB(255, 4, 4, 4),
+        primaryColor: Colors.lightBlue[800],
+      ),
       home: HomePage(),
     );
   }
 }
+
+// final String? hubip = prefs.getString('action');
+String? hubip;
+String? hubport;
+bool? isHTTPS = false;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -56,6 +74,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+        // backgroundColor: Colors.black,
         body: Center(
             child: Wrap(
       children: [
@@ -69,8 +88,8 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Hub IP',
                 hintText: 'Enter Hub IP',
                 hintStyle: TextStyle(fontSize: 15),
-                icon: Icon(Icons.account_tree_sharp),
-                iconColor: Colors.blueAccent,
+                //icon: Icon(Icons.account_tree_sharp),
+                // iconColor: Colors.blueAccent,
               ),
               controller: _controller,
               onSubmitted: (String value) async {
@@ -84,7 +103,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(18),
           child: SizedBox(
             width: 130,
             child: TextField(
@@ -98,10 +117,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        Center(
-            child: Row(children: [
-          Center(
-              child: Checkbox(
+        Padding(
+          padding: EdgeInsets.only(left: 120),
+          child: Checkbox(
             checkColor: Colors.white,
             fillColor: MaterialStateProperty.resolveWith(getColor),
             value: isHTTPS,
@@ -111,9 +129,12 @@ class _HomePageState extends State<HomePage> {
                 isHTTPS = value!;
               });
             },
-          )),
-          Text('Is server HTTPS?')
-        ])),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(15),
+          child: const Text('Is server HTTPS?'),
+        ),
         Center(
           child: SizedBox(
             width: 130,
