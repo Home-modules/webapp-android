@@ -1,19 +1,45 @@
+// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, unnecessary_brace_in_string_interps
+
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-SharedPreferences? prefs;
-void loadPrefs() async {
-  prefs = await SharedPreferences.getInstance();
+String hubip = '127.0.0.1';
+String hubport = '80';
+bool isHTTPS = false;
+Future<bool> getHTTPS() async {
+  final prefs = await SharedPreferences.getInstance();
+  isHTTPS = await prefs.getBool('isHTTPS') ?? false;
+  return prefs.getBool('isHTTPS') ?? false;
 }
 
-void main() => runApp(const MyApp());
+Future<String> getHubIp() async {
+  final prefs = await SharedPreferences.getInstance();
+  hubip = await prefs.getString('hubip') ?? '127.0.0.1';
+  return prefs.getString('hubip') ?? '127.0.0.1';
+}
+
+Future<String> getHubPort() async {
+  final prefs = await SharedPreferences.getInstance();
+  hubport = await prefs.getString('hubport') ?? '80';
+  return prefs.getString('hubport') ?? '80';
+}
+
+Future setPrefs() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setBool('isHTTPS', isHTTPS);
+  prefs.setString('hubip', hubip);
+  prefs.setString('hubport', hubport);
+}
+
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    loadPrefs();
     return MaterialApp(
       theme: ThemeData(
         brightness: Brightness.light,
@@ -21,7 +47,6 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        backgroundColor: Color.fromARGB(255, 4, 4, 4),
         primaryColor: Colors.lightBlue[800],
       ),
       home: HomePage(),
@@ -30,9 +55,6 @@ class MyApp extends StatelessWidget {
 }
 
 // final String? hubip = prefs.getString('action');
-String? hubip;
-String? hubport;
-bool? isHTTPS = false;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,14 +64,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late TextEditingController _controller;
-
-  final myController = TextEditingController();
-
+  late TextEditingController _controller; // Hub Ip
+  late TextEditingController myController; // Hub Port
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    myController = TextEditingController();
   }
 
   @override
@@ -61,6 +82,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getHTTPS();
+    getHubIp();
+    getHubPort();
+    _controller.text = hubip;
+    myController.text = hubport;
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -124,9 +150,9 @@ class _HomePageState extends State<HomePage> {
             fillColor: MaterialStateProperty.resolveWith(getColor),
             value: isHTTPS,
             onChanged: (bool? value) {
-              isHTTPS = value;
+              isHTTPS = value!;
               setState(() {
-                isHTTPS = value!;
+                isHTTPS = value;
               });
             },
           ),
@@ -143,6 +169,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 hubip = _controller.text;
                 hubport = myController.text;
+                setPrefs();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const WebApp()),
@@ -166,7 +193,7 @@ class WebApp extends StatelessWidget {
       httpState = "https";
     else
       httpState = "http";
-    print('${httpState}://${hubip}:${hubport}');
+    //print('${httpState}://${hubip}:${hubport}');
     return Scaffold(
         body: SafeArea(
             child: WebViewPlus(
