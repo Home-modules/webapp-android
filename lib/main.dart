@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String hubip = '127.0.0.1';
-String hubport = '80';
-bool isHTTPS = false;
+String? hubip;
+String? hubport;
+bool? isHTTPS;
 Future<bool> getHTTPS() async {
   final prefs = await SharedPreferences.getInstance();
   isHTTPS = await prefs.getBool('isHTTPS') ?? false;
@@ -27,9 +27,9 @@ Future<String> getHubPort() async {
 
 Future setPrefs() async {
   final prefs = await SharedPreferences.getInstance();
-  prefs.setBool('isHTTPS', isHTTPS);
-  prefs.setString('hubip', hubip);
-  prefs.setString('hubport', hubport);
+  prefs.setBool('isHTTPS', isHTTPS!);
+  prefs.setString('hubip', hubip!);
+  prefs.setString('hubport', hubport!);
 }
 
 void main() {
@@ -85,8 +85,14 @@ class _HomePageState extends State<HomePage> {
     getHTTPS();
     getHubIp();
     getHubPort();
-    _controller.text = hubip;
-    myController.text = hubport;
+    _controller.text = hubip ?? '';
+    myController.text = hubport ?? '';
+    if (hubip != null && hubport != null && isHTTPS != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const WebApp()),
+      );
+    }
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -120,10 +126,6 @@ class _HomePageState extends State<HomePage> {
               controller: _controller,
               onSubmitted: (String value) async {
                 hubip = value;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const WebApp()),
-                );
               },
             ),
           ),
