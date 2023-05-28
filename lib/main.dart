@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 String? hubip;
 String? hubport;
-bool? isHTTPS;
+bool? isHTTPS = false;
+bool? skiptowebapp;
 Future<bool> getHTTPS() async {
   final prefs = await SharedPreferences.getInstance();
   isHTTPS = await prefs.getBool('isHTTPS') ?? false;
@@ -21,6 +22,7 @@ Future<String> getHubIp() async {
 
 Future<String> getHubPort() async {
   final prefs = await SharedPreferences.getInstance();
+  if (await prefs.getString('hubport') == null) skiptowebapp = false;
   hubport = await prefs.getString('hubport') ?? '80';
   return prefs.getString('hubport') ?? '80';
 }
@@ -87,7 +89,7 @@ class _HomePageState extends State<HomePage> {
     getHubPort();
     _controller.text = hubip ?? '';
     myController.text = hubport ?? '';
-    if (hubip != null && hubport != null && isHTTPS != null) {
+    if (skiptowebapp!) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const WebApp()),
