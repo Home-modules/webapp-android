@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 String? hubip;
 String? hubport;
 bool? isHTTPS = false;
-bool? skiptowebapp;
+bool? skiptowebapp = false;
 Future<bool> getHTTPS() async {
   final prefs = await SharedPreferences.getInstance();
   isHTTPS = await prefs.getBool('isHTTPS') ?? false;
@@ -22,7 +22,10 @@ Future<String> getHubIp() async {
 
 Future<String> getHubPort() async {
   final prefs = await SharedPreferences.getInstance();
-  if (await prefs.getString('hubport') == null) skiptowebapp = false;
+  if (await prefs.getString('hubport') == null)
+    skiptowebapp = false;
+  else
+    skiptowebapp = true;
   hubport = await prefs.getString('hubport') ?? '80';
   return prefs.getString('hubport') ?? '80';
 }
@@ -43,6 +46,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: const Color.fromARGB(255, 33, 71, 92),
@@ -89,12 +93,12 @@ class _HomePageState extends State<HomePage> {
     getHubPort();
     _controller.text = hubip ?? '';
     myController.text = hubport ?? '';
-    if (skiptowebapp!) {
+    /*if (skiptowebapp!) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const WebApp()),
       );
-    }
+    }*/
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -198,11 +202,17 @@ class WebApp extends StatelessWidget {
     else
       httpState = "http";
     //print('${httpState}://${hubip}:${hubport}');
-    return Scaffold(
-        body: SafeArea(
-            child: WebViewPlus(
-      initialUrl: '${httpState}://${hubip}:${hubport}',
-      javascriptMode: JavascriptMode.unrestricted,
-    )));
+    return WillPopScope(
+        onWillPop: () async {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('The System Back Button is Deactivated')));
+          return false;
+        },
+        child: Scaffold(
+            body: SafeArea(
+                child: WebViewPlus(
+          initialUrl: '${httpState}://${hubip}:${hubport}',
+          javascriptMode: JavascriptMode.unrestricted,
+        ))));
   }
 }

@@ -11,6 +11,7 @@
 .buildlog/
 .history
 .svn/
+# Other useless builds
 
 # IntelliJ related
 *.iml
