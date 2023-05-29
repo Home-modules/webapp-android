@@ -26,3 +26,6 @@ After some time, your apk file will be available at: `build/tools/outputs/app/fl
 ### Contributing to this code
 
 All pull requests, forks and issues are welcomed here!
+
+### iOS
+We haven't tried iOS builds yet. We'll welcome any suggeations/reports on iOS builds
