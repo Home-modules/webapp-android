@@ -21,7 +21,7 @@ You can clone this repository by writing `git clone https://github.com/MohsenEMX
 
 After cloning the repo, Write `flutter pub get` to install required plugins.
 Now Write `flutter build apk` to build your app for Android platform.
-After some time, your apk file will be available at: `build/tools/outputs/app/flutter-apk/`
+After some time, your apk file will be available at: `build/app/outputs/app/flutter-apk/`
 
 ### Contributing to this code
 
