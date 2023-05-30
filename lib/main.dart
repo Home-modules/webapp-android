@@ -18,13 +18,13 @@ String? ipFieldErrorText;
 
 Future<bool> getHTTPS() async {
   final prefs = await SharedPreferences.getInstance();
-  isHTTPS = await prefs.getBool('isHTTPS') ?? false;
+  isHTTPS = await prefs.getBool('isHTTPS');
   return prefs.getBool('isHTTPS') ?? false;
 }
 
 Future<String> getHubIp() async {
   final prefs = await SharedPreferences.getInstance();
-  hubip = await prefs.getString('hubip') ?? '';
+  hubip = await prefs.getString('hubip');
   return prefs.getString('hubip') ?? '127.0.0.1';
 }
 
@@ -34,7 +34,7 @@ Future<String> getHubPort() async {
     skiptowebapp = false;
   else
     skiptowebapp = true;
-  hubport = await prefs.getString('hubport') ?? '80';
+  hubport = await prefs.getString('hubport');
   return prefs.getString('hubport') ?? '80';
 }
 
@@ -122,11 +122,11 @@ class _HomePageState extends State<HomePage> {
     }
 
     skipIp(context, skiptowebapp);
-    /*setState(() {
+    setState(() {
       getHTTPS();
       getHubIp();
       getHubPort();
-    });*/
+    });
     return Scaffold(
         // backgroundColor: Colors.black,
         body: Center(
@@ -257,6 +257,10 @@ class _WebAppState extends State<WebApp> {
                 ipFieldErrorText =
                     'Hub is unreachable, please double check ip or port.';
               });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             }
           },
         ))));
