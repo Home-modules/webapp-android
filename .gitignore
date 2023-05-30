@@ -13,6 +13,9 @@
 .svn/
 # Other useless builds
 
+# key stuff
+*.jks
+key.properties
 # IntelliJ related
 *.iml
 *.ipr

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, unnecessary_brace_in_string_interps, avoid_print, await_only_futures, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
@@ -47,10 +47,10 @@ Future setPrefs() async {
 
 void skipIp(context, skiptowebapp) async {
   if (skiptowebapp!) {
-    await Navigator.push(
+    /*await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const WebApp()),
-    );
+    );*/
   }
 }
 
@@ -142,6 +142,7 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Hub IP',
                 hintText: 'Enter Hub IP',
                 hintStyle: TextStyle(fontSize: 15),
+                errorMaxLines: 3,
                 errorText: showIPError ? '${ipFieldErrorText}' : null,
                 //icon: Icon(Icons.account_tree_sharp),
                 // iconColor: Colors.blueAccent,
@@ -163,6 +164,7 @@ class _HomePageState extends State<HomePage> {
                 labelText: 'Hub Port',
                 hintText: 'Enter Hub Port',
                 hintStyle: TextStyle(fontSize: 15),
+                errorMaxLines: 4,
                 errorText: showPortError ? '${portFieldErrorText}' : null,
               ),
               controller: myController,
@@ -194,14 +196,22 @@ class _HomePageState extends State<HomePage> {
               child: Text('Go'),
               onPressed: () {
                 //throw Exception('bruh');
-
                 hubip = _controller.text;
                 hubport = myController.text;
                 setPrefs();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const WebApp()),
-                );
+                if ((!hubport!.contains('80') || !hubport!.contains('443')) &&
+                    int.parse(hubport!) < 1023) {}
+                if (_controller.text.isEmpty) {
+                  setState(() {
+                    showIPError = true;
+                    ipFieldErrorText = 'Hub IP cannot be empty';
+                  });
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const WebApp()),
+                  );
+                }
               },
             ),
           ),
@@ -221,22 +231,28 @@ class WebApp extends StatefulWidget {
 class _WebAppState extends State<WebApp> {
   @override
   Widget build(BuildContext context) {
-    if (hubip!.trim() == '') {
-      setState(() {
-        showIPError = true;
-        ipFieldErrorText = 'Hub IP cannot be empty';
-      });
-    }
     String? httpState;
     if (isHTTPS == true)
       httpState = "https";
     else
       httpState = "http";
-    //print('${httpState}://${hubip}:${hubport}');
+
+    if (hubport!.isEmpty || hubport == null) {
+      if (httpState == "http")
+        hubport = '80';
+      else if (hubport == "https") hubport = '443';
+    }
+
+    hubip = hubip!.trim();
+    setState(() {
+      showIPError = false;
+      showPortError = false;
+    });
+
     return WillPopScope(
         onWillPop: () async {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('The System Back Button is Deactivated')));
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Back Button is disabled')));
           return false;
         },
         child: Scaffold(
@@ -245,17 +261,25 @@ class _WebAppState extends State<WebApp> {
           initialUrl: '${httpState}://${hubip}:${hubport}',
           javascriptMode: JavascriptMode.unrestricted,
           onWebResourceError: (error) async {
-            print(await error.errorCode);
             print(await error.description);
-            print(await error.errorType);
             print(await error.failingUrl);
-            if ((Uri.parse(await error.failingUrl!).port != 703) &&
+            int failingPort = Uri.parse(await error.failingUrl!).port;
+            if (await error.description == 'net::ERR_UNSAFE_PORT') {
+              setState(() {
+                showPortError = true;
+                portFieldErrorText =
+                    'The selected port is unsafe. Please change the port.';
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            } else if (failingPort != 703 &&
                 await error.description == 'net::ERR_NAME_NOT_RESOLVED') {
-              print('Error is done');
               setState(() {
                 showIPError = true;
                 ipFieldErrorText =
-                    'Hub is unreachable, please double check ip or port.';
+                    'Hub is unreachable. Please try double checking the IP and Port.';
               });
               Navigator.push(
                 context,
