@@ -1,7 +1,6 @@
 # HomeModules
 
-Android wrapper for Home_modules web app
-
+Android wrapper for Home_modules web app.
 ## Getting Started
 
 You can follow the following steps to build this app for yourself.
@@ -15,7 +14,7 @@ Now you are basically done!
 
 ### Cloning / Downloading the Code
 
-You can clone this repository by writing `git clone https://github.com/MohsenEMX/HomeModules-Android.git` in the terminal/console.
+You can clone this repository by writing `git clone https://github.com/Home-modules/webapp-android.git` in the terminal/console.
 
 ### Building
 
