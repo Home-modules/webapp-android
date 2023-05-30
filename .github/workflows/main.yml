@@ -3,7 +3,7 @@ name: Flutter Workflow
 on: [push, workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -32,4 +32,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: apk
-          path: build/app/outputs/fluttet-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
