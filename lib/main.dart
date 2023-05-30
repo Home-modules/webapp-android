@@ -4,10 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Used as settings
 String? hubip;
 String? hubport;
 bool? isHTTPS = false;
 bool? skiptowebapp = false;
+
+// Used for error handling
+bool showPortError = false;
+String? portFieldErrorText;
+bool showIPError = false;
+String? ipFieldErrorText;
+
 Future<bool> getHTTPS() async {
   final prefs = await SharedPreferences.getInstance();
   isHTTPS = await prefs.getBool('isHTTPS') ?? false;
@@ -16,7 +24,7 @@ Future<bool> getHTTPS() async {
 
 Future<String> getHubIp() async {
   final prefs = await SharedPreferences.getInstance();
-  hubip = await prefs.getString('hubip') ?? '127.0.0.1';
+  hubip = await prefs.getString('hubip') ?? '';
   return prefs.getString('hubip') ?? '127.0.0.1';
 }
 
@@ -35,6 +43,15 @@ Future setPrefs() async {
   prefs.setBool('isHTTPS', isHTTPS!);
   prefs.setString('hubip', hubip!);
   prefs.setString('hubport', hubport!);
+}
+
+void skipIp(context, skiptowebapp) async {
+  if (skiptowebapp!) {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const WebApp()),
+    );
+  }
 }
 
 void main() {
@@ -72,6 +89,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late TextEditingController _controller; // Hub Ip
   late TextEditingController myController; // Hub Port
+
   @override
   void initState() {
     super.initState();
@@ -88,17 +106,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    getHTTPS();
-    getHubIp();
-    getHubPort();
     _controller.text = hubip ?? '';
     myController.text = hubport ?? '';
-    /*if (skiptowebapp!) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const WebApp()),
-      );
-    }*/
+
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -111,6 +121,12 @@ class _HomePageState extends State<HomePage> {
       return Colors.blueAccent;
     }
 
+    skipIp(context, skiptowebapp);
+    /*setState(() {
+      getHTTPS();
+      getHubIp();
+      getHubPort();
+    });*/
     return Scaffold(
         // backgroundColor: Colors.black,
         body: Center(
@@ -121,11 +137,12 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             width: 200,
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Hub IP',
                 hintText: 'Enter Hub IP',
                 hintStyle: TextStyle(fontSize: 15),
+                errorText: showIPError ? '${ipFieldErrorText}' : null,
                 //icon: Icon(Icons.account_tree_sharp),
                 // iconColor: Colors.blueAccent,
               ),
@@ -141,11 +158,12 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             width: 130,
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Hub Port',
                 hintText: 'Enter Hub Port',
                 hintStyle: TextStyle(fontSize: 15),
+                errorText: showPortError ? '${portFieldErrorText}' : null,
               ),
               controller: myController,
             ),
@@ -175,6 +193,8 @@ class _HomePageState extends State<HomePage> {
             child: ElevatedButton(
               child: Text('Go'),
               onPressed: () {
+                //throw Exception('bruh');
+
                 hubip = _controller.text;
                 hubport = myController.text;
                 setPrefs();
@@ -191,11 +211,22 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class WebApp extends StatelessWidget {
+class WebApp extends StatefulWidget {
   const WebApp({super.key});
 
   @override
+  State<WebApp> createState() => _WebAppState();
+}
+
+class _WebAppState extends State<WebApp> {
+  @override
   Widget build(BuildContext context) {
+    if (hubip!.trim() == '') {
+      setState(() {
+        showIPError = true;
+        ipFieldErrorText = 'Hub IP cannot be empty';
+      });
+    }
     String? httpState;
     if (isHTTPS == true)
       httpState = "https";
@@ -213,6 +244,21 @@ class WebApp extends StatelessWidget {
                 child: WebViewPlus(
           initialUrl: '${httpState}://${hubip}:${hubport}',
           javascriptMode: JavascriptMode.unrestricted,
+          onWebResourceError: (error) async {
+            print(await error.errorCode);
+            print(await error.description);
+            print(await error.errorType);
+            print(await error.failingUrl);
+            if ((Uri.parse(await error.failingUrl!).port != 703) &&
+                await error.description == 'net::ERR_NAME_NOT_RESOLVED') {
+              print('Error is done');
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText =
+                    'Hub is unreachable, please double check ip or port.';
+              });
+            }
+          },
         ))));
   }
 }
