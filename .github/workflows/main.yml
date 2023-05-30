@@ -26,6 +26,12 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
+      - name: Keystore
+        shell: bash
+        run: |
+          echo -n "${{ secrets.KEYSTORE }}" | base64 -d > android/app/keystore.kjs
+          echo -n "${{ secrets.KEYSTORE_PROPERTIES }}" | base64 -d > android/app/key.properties
+
       - name: Build Android package
         run: flutter build apk
         
