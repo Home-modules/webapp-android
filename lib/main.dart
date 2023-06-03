@@ -25,7 +25,7 @@ Future<bool> getHTTPS() async {
 Future<String> getHubIp() async {
   final prefs = await SharedPreferences.getInstance();
   hubip = await prefs.getString('hubip');
-  return prefs.getString('hubip') ?? '127.0.0.1';
+  return prefs.getString('hubip')!;
 }
 
 Future<String> getHubPort() async {
@@ -35,7 +35,7 @@ Future<String> getHubPort() async {
   else
     skiptowebapp = true;
   hubport = await prefs.getString('hubport');
-  return prefs.getString('hubport') ?? '80';
+  return prefs.getString('hubport')!;
 }
 
 Future setPrefs() async {
@@ -107,6 +107,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getHTTPS();
+    getHubIp();
+    getHubPort();
+    setState(() {
+      isHTTPS = isHTTPS;
+      hubip = hubip;
+      hubport = hubport;
+      print('');
+    });
     _controller.text = hubip ?? '';
     myController.text = hubport ?? '';
 
@@ -123,11 +132,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     skipIp(context, skiptowebapp);
-    setState(() {
-      getHTTPS();
-      getHubIp();
-      getHubPort();
-    });
     return Scaffold(
         // backgroundColor: Colors.black,
         body: Center(
