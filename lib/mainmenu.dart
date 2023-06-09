@@ -66,25 +66,38 @@ class _MainMenuState extends State<MainMenu> {
       myController.text = hubport ?? '';
       textController.text = hubip ?? '';
     });
+    print(
+        'hubip: ${hubip} , hubport: ${hubport}, isHTTPS: ${isHTTPS}, hubip text: ${textController.text}');
     return Scaffold(
         resizeToAvoidBottomInset:
             false, // overlays keyboards instead of pushing the screen
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center, //
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
               children: [
-                Padding(
+                Center(
+                    child: Padding(
                   padding: inputIPpadding,
                   child: HubIPinput(),
-                ),
+                )),
                 Padding(
                   padding: inputPORTpadding,
                   child: HubPORTinput(),
                 ),
               ],
+            ),
+            Wrap(
+              children: [
+                isHTTPSinput(),
+                Padding(
+                    padding: EdgeInsets.only(top: 15), child: Text('Use HTTPS'))
+              ],
+            ),
+            Center(
+              child: GObutton(),
             )
           ],
         ));

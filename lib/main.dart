@@ -17,21 +17,25 @@ bool showPortError = false;
 String? portFieldErrorText;
 bool showIPError = false;
 String? ipFieldErrorText;
+var prefs;
+void loadStorage() async {
+  prefs = await SharedPreferences.getInstance();
+}
 
 Future<bool> getHTTPS() async {
-  final prefs = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
   isHTTPS = await prefs.getBool('isHTTPS') ?? false;
   return prefs.getBool('isHTTPS') ?? false;
 }
 
 Future<String> getHubIp() async {
-  final prefs = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
   hubip = await prefs.getString('hubip');
   return prefs.getString('hubip') ?? '';
 }
 
 Future<String> getHubPort() async {
-  final prefs = await SharedPreferences.getInstance();
+  prefs = await SharedPreferences.getInstance();
   if (await prefs.getString('hubport') == null)
     skiptowebapp = false;
   else
@@ -81,6 +85,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    loadStorage();
     return MainMenu();
   }
 }
