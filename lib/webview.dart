@@ -1,3 +1,5 @@
+// ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps
+
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'main.dart';
@@ -13,15 +15,18 @@ class _WebAppState extends State<WebApp> {
   @override
   Widget build(BuildContext context) {
     String? httpState;
-    if (isHTTPS == true)
+    if (isHTTPS == true) {
       httpState = "https";
-    else
+    } else {
       httpState = "http";
+    }
 
     if (hubport!.isEmpty || hubport == null) {
-      if (httpState == "http")
+      if (httpState == "http") {
         hubport = '80';
-      else if (hubport == "https") hubport = '443';
+      } else if (hubport == "https") {
+        hubport = '443';
+      }
     }
 
     hubip = hubip!.trim();
