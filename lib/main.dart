@@ -105,9 +105,6 @@ class _HomePageState extends State<HomePage> {
     getHubPort();
     setState(() {
       isHTTPS = isHTTPS;
-      hubip = hubip;
-      hubport = hubport;
-      print('');
     });
     _controller.text = hubip ?? '';
     myController.text = hubport ?? '';
@@ -167,6 +164,10 @@ class _HomePageState extends State<HomePage> {
                     errorText: showPortError ? '${portFieldErrorText}' : null,
                   ),
                   controller: myController,
+                  keyboardType: TextInputType.number,
+                  onSubmitted: (String value) {
+                    hubport = value;
+                  },
                 ),
               ),
             ),
@@ -177,7 +178,6 @@ class _HomePageState extends State<HomePage> {
                 fillColor: MaterialStateProperty.resolveWith(getColor),
                 value: isHTTPS,
                 onChanged: (bool? value) {
-                  isHTTPS = value!;
                   setState(() {
                     isHTTPS = value;
                   });
