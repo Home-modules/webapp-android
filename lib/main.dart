@@ -4,7 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'webview.dart';
+import 'mainmenu.dart';
 
 // Used as settings
 String? hubip;
@@ -71,8 +71,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// final String? hubip = prefs.getString('action');
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -81,138 +79,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late TextEditingController _controller; // Hub Ip
-  late TextEditingController myController; // Hub Port
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    myController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    myController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    getHTTPS();
-    getHubIp();
-    getHubPort();
-    setState(() {
-      isHTTPS = isHTTPS;
-    });
-    _controller.text = hubip ?? '';
-    myController.text = hubport ?? '';
-
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.blueAccent;
-      }
-      return Colors.blueAccent;
-    }
-
-    return Scaffold(
-        // backgroundColor: Colors.black,
-        resizeToAvoidBottomInset:
-            false, // overlays keyboards instead of pushing the screen
-        body: Center(
-            child: Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: SizedBox(
-                width: 200,
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Hub IP',
-                    hintText: 'Enter Hub IP',
-                    hintStyle: TextStyle(fontSize: 15),
-                    errorMaxLines: 3,
-                    errorText: showIPError ? '${ipFieldErrorText}' : null,
-                    //icon: Icon(Icons.account_tree_sharp),
-                    // iconColor: Colors.blueAccent,
-                  ),
-                  controller: _controller,
-                  onSubmitted: (String value) async {
-                    hubip = value;
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(18),
-              child: SizedBox(
-                width: 130,
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Hub Port',
-                    hintText: 'Enter Hub Port',
-                    hintStyle: TextStyle(fontSize: 15),
-                    errorMaxLines: 4,
-                    errorText: showPortError ? '${portFieldErrorText}' : null,
-                  ),
-                  controller: myController,
-                  keyboardType: TextInputType.number,
-                  onSubmitted: (String value) {
-                    hubport = value;
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 120),
-              child: Checkbox(
-                checkColor: Colors.white,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                value: isHTTPS,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isHTTPS = value;
-                  });
-                },
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(15),
-              child: const Text('Is server HTTPS?'),
-            ),
-            Center(
-              child: SizedBox(
-                width: 130,
-                child: ElevatedButton(
-                  child: Text('Go'),
-                  onPressed: () {
-                    hubip = _controller.text;
-                    hubport = myController.text;
-                    setPrefs();
-                    if (_controller.text.isEmpty) {
-                      setState(() {
-                        showIPError = true;
-                        ipFieldErrorText = 'Hub IP cannot be empty';
-                      });
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const WebApp()),
-                      );
-                    }
-                  },
-                ),
-              ),
-            )
-          ],
-        )));
+    return MainMenu();
   }
 }
