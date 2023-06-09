@@ -1,4 +1,6 @@
-// ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps
+// ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps, unused_import
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
@@ -10,6 +12,8 @@ class WebApp extends StatefulWidget {
   @override
   State<WebApp> createState() => _WebAppState();
 }
+
+WebViewPlusController? webViewPlusController;
 
 class _WebAppState extends State<WebApp> {
   @override
@@ -35,44 +39,39 @@ class _WebAppState extends State<WebApp> {
       showPortError = false;
     });
 
-    return WillPopScope(
-        onWillPop: () async {
-          //ScaffoldMessenger.of(context).showSnackBar(
-          //const SnackBar(content: Text('Back Button is disabled')));
-          return false;
-        },
-        child: Scaffold(
-            body: SafeArea(
-                child: WebViewPlus(
-          initialUrl: '${httpState}://${hubip}:${hubport}',
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebResourceError: (error) async {
-            print(await error.description);
-            print(await error.failingUrl);
-            int failingPort = Uri.parse(await error.failingUrl!).port;
-            if (await error.description == 'net::ERR_UNSAFE_PORT') {
-              setState(() {
-                showPortError = true;
-                portFieldErrorText =
-                    'The selected port is unsafe. Please change the port.';
-              });
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            } else if (failingPort != 703 &&
-                await error.description == 'net::ERR_NAME_NOT_RESOLVED') {
-              setState(() {
-                showIPError = true;
-                ipFieldErrorText =
-                    'Hub is unreachable. Please try double checking the IP and Port.';
-              });
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            }
-          },
-        ))));
+    return Scaffold(
+        body: SafeArea(
+            child: WebViewPlus(
+      gestureNavigationEnabled: true,
+      initialUrl: '${httpState}://${hubip}:${hubport}',
+      javascriptMode: JavascriptMode.unrestricted,
+      onWebResourceError: (error) async {
+        print(await error.description);
+        print(await error.failingUrl);
+        int failingPort = Uri.parse(await error.failingUrl!).port;
+        if (await error.description == 'net::ERR_UNSAFE_PORT') {
+          setState(() {
+            showPortError = true;
+            portFieldErrorText =
+                'The selected port is unsafe. Please change the port.';
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        } else if (failingPort != 703 &&
+            await error.description == 'net::ERR_NAME_NOT_RESOLVED') {
+          setState(() {
+            showIPError = true;
+            ipFieldErrorText =
+                'Hub is unreachable. Please try double checking the IP and Port.';
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        }
+      },
+    )));
   }
 }

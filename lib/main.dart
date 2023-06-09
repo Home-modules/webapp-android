@@ -1,6 +1,6 @@
 // ignore next line:
 
-// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, unnecessary_brace_in_string_interps, avoid_print, await_only_futures, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, curly_braces_in_flow_control_structures, unnecessary_brace_in_string_interps, avoid_print, await_only_futures, use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

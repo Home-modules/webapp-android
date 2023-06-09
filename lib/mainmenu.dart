@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, camel_case_types
+// ignore_for_file: prefer_const_constructors, camel_case_types, avoid_print, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps
 
 import 'package:flutter/material.dart';
 import 'main.dart';
@@ -63,6 +63,7 @@ class _MainMenuState extends State<MainMenu> {
     phoneScreenHeight = MediaQuery.of(context).size.height.toInt();
     // print(
     //    'Screen Height: ${phoneScreenHeight}px, phone screen width: ${phoneScreenWidth}px');
+    loadStorage();
     getHTTPS();
     getHubIp();
     getHubPort();
@@ -224,7 +225,7 @@ class _GObuttonState extends State<GObutton> {
             hubip = ipController.text;
             hubport = portController.text;
             setPrefs();
-            if (ipController.text.isEmpty) {
+            if (ipController.text.isEmpty || ipController.text.trim() == '') {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText = 'Hub IP cannot be empty';
