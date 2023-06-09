@@ -5,16 +5,17 @@ import 'main.dart';
 import 'webview.dart';
 
 // Global stuff
-late TextEditingController textController;
-late TextEditingController myController;
-
+late TextEditingController ipController;
+late TextEditingController portController;
+late TextEditingController usernameController;
+late TextEditingController passwordController;
 Radius inputfieldBorderOutter = Radius.circular(8);
-Radius inputfieldBorderInner = Radius.circular(3);
+Radius inputfieldBorderInner = Radius.circular(0);
 
 EdgeInsets inputIPpadding =
-    EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 30);
+    EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 0);
 EdgeInsets inputPORTpadding =
-    EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 15);
+    EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5);
 
 int? phoneScreenWidth;
 int? phoneScreenHeight;
@@ -41,14 +42,18 @@ class _MainMenuState extends State<MainMenu> {
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
-    myController = TextEditingController();
+    ipController = TextEditingController();
+    portController = TextEditingController();
+    usernameController = TextEditingController();
+    passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController.dispose();
-    myController.dispose();
+    ipController.dispose();
+    portController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -63,11 +68,11 @@ class _MainMenuState extends State<MainMenu> {
     getHubPort();
     setState(() {
       isHTTPS = isHTTPS;
-      myController.text = hubport ?? '';
-      textController.text = hubip ?? '';
+      portController.text = hubport ?? '';
+      ipController.text = hubip ?? '';
     });
     print(
-        'hubip: ${hubip} , hubport: ${hubport}, isHTTPS: ${isHTTPS}, hubip text: ${textController.text}');
+        'hubip: ${hubip} , hubport: ${hubport}, isHTTPS: ${isHTTPS}, hubip text: ${ipController.text}');
     return Scaffold(
         resizeToAvoidBottomInset:
             false, // overlays keyboards instead of pushing the screen
@@ -75,19 +80,19 @@ class _MainMenuState extends State<MainMenu> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                Center(
-                    child: Padding(
-                  padding: inputIPpadding,
-                  child: HubIPinput(),
-                )),
-                Padding(
-                  padding: inputPORTpadding,
-                  child: HubPORTinput(),
-                ),
-              ],
+            Center(
+              child: Wrap(
+                children: [
+                  Padding(
+                    padding: inputIPpadding,
+                    child: HubIPinput(),
+                  ),
+                  Padding(
+                    padding: inputPORTpadding,
+                    child: HubPORTinput(),
+                  ),
+                ],
+              ),
             ),
             Wrap(
               children: [
@@ -131,7 +136,7 @@ class HubIPinputState_ extends State<HubIPinput> {
           //icon: Icon(Icons.account_tree_sharp),
           // iconColor: Colors.blueAccent,
         ),
-        controller: textController,
+        controller: ipController,
         onSubmitted: (String value) async {
           hubip = value;
         },
@@ -167,7 +172,7 @@ class _HubPORTinputState extends State<HubPORTinput> {
             errorMaxLines: 4,
             errorText: showPortError ? portFieldErrorText : null,
           ),
-          controller: myController,
+          controller: portController,
           keyboardType: TextInputType.number,
           onSubmitted: (String value) {
             hubport = value;
@@ -189,10 +194,11 @@ class _isHTTPSinputState extends State<isHTTPSinput> {
     return Checkbox(
       checkColor: Colors.white,
       fillColor: MaterialStateProperty.resolveWith(getColor),
-      value: true,
+      value: false,
       onChanged: (value) {
+        isHTTPS = value;
         setState(() {
-          value = !value!;
+          value = isHTTPS;
         });
       },
     );
@@ -209,24 +215,27 @@ class GObutton extends StatefulWidget {
 class _GObuttonState extends State<GObutton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: Text('Go'),
-      onPressed: () {
-        hubip = textController.text;
-        hubport = myController.text;
-        setPrefs();
-        if (textController.text.isEmpty) {
-          setState(() {
-            showIPError = true;
-            ipFieldErrorText = 'Hub IP cannot be empty';
-          });
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WebApp()),
-          );
-        }
-      },
-    );
+    return SizedBox(
+        width: 100,
+        child: ElevatedButton(
+          style: ButtonStyle(),
+          child: Text('Continue'),
+          onPressed: () {
+            hubip = ipController.text;
+            hubport = portController.text;
+            setPrefs();
+            if (ipController.text.isEmpty) {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText = 'Hub IP cannot be empty';
+              });
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WebApp()),
+              );
+            }
+          },
+        ));
   }
 }

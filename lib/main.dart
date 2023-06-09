@@ -9,6 +9,8 @@ import 'mainmenu.dart';
 // Used as settings
 String? hubip;
 String? hubport;
+String? username;
+String? password;
 bool? isHTTPS = false;
 bool? skiptowebapp = false;
 
@@ -17,6 +19,10 @@ bool showPortError = false;
 String? portFieldErrorText;
 bool showIPError = false;
 String? ipFieldErrorText;
+bool showUsernameError = false;
+String? usernameErrorText;
+bool showPasswordError = false;
+String? passwordFieldErrorText;
 var prefs;
 void loadStorage() async {
   prefs = await SharedPreferences.getInstance();

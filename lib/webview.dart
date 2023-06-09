@@ -37,8 +37,8 @@ class _WebAppState extends State<WebApp> {
 
     return WillPopScope(
         onWillPop: () async {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Back Button is disabled')));
+          //ScaffoldMessenger.of(context).showSnackBar(
+          //const SnackBar(content: Text('Back Button is disabled')));
           return false;
         },
         child: Scaffold(
