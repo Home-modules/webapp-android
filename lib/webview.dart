@@ -13,7 +13,8 @@ class WebApp extends StatefulWidget {
   State<WebApp> createState() => _WebAppState();
 }
 
-WebViewPlusController? webViewPlusController;
+// WebViewPlusController? webViewPlusController;
+// Unused WebViewController, might be used later
 
 class _WebAppState extends State<WebApp> {
   @override

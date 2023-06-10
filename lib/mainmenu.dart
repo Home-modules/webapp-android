@@ -82,6 +82,19 @@ class _MainMenuState extends State<MainMenu> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
+                child: Wrap(
+              children: [
+                Padding(
+                  child: Text('Hub IP'),
+                  padding: EdgeInsets.only(left: 5, right: 105),
+                ),
+                Padding(
+                  child: Text('Hub Port'),
+                  padding: EdgeInsets.only(left: 100, right: 5),
+                ),
+              ],
+            )),
+            Center(
               child: Wrap(
                 children: [
                   Padding(
@@ -130,7 +143,7 @@ class HubIPinputState_ extends State<HubIPinput> {
                   bottomLeft: inputfieldBorderOutter,
                   bottomRight: inputfieldBorderInner,
                   topRight: inputfieldBorderInner)),
-          labelText: 'Hub IP',
+          //labelText: 'Hub IP',
           hintText: 'Enter Hub IP',
           errorMaxLines: 3,
           errorText: showIPError ? ipFieldErrorText : null,
@@ -167,7 +180,7 @@ class _HubPORTinputState extends State<HubPORTinput> {
                   bottomLeft: inputfieldBorderInner,
                   topLeft: inputfieldBorderInner),
             ),
-            labelText: 'Hub Port',
+            //labelText: 'Hub Port',
             hintText: 'Enter Hub Port',
             hintStyle: TextStyle(fontSize: 15),
             errorMaxLines: 4,

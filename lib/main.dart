@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
+        //scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
         primaryColor: Colors.lightBlue[800],
       ),
       home: HomePage(),
