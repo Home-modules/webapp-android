@@ -9,16 +9,23 @@ late TextEditingController ipController;
 late TextEditingController portController;
 late TextEditingController usernameController;
 late TextEditingController passwordController;
+
+// Might be changed later\
+bool isThisFirstLoad = false;
+bool isThisSecondLoad = false;
+// Styling Vars
 Radius inputfieldBorderOutter = Radius.circular(8);
 Radius inputfieldBorderInner = Radius.circular(0);
-
 EdgeInsets inputIPpadding =
     EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 0);
 EdgeInsets inputPORTpadding =
     EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5);
 
+// Unused for now
 int? phoneScreenWidth;
 int? phoneScreenHeight;
+
+// Used for Checkbox stuff
 Color getColor(Set<MaterialState> states) {
   const Set<MaterialState> interactiveStates = <MaterialState>{
     MaterialState.pressed,
@@ -67,11 +74,22 @@ class _MainMenuState extends State<MainMenu> {
     getHTTPS();
     getHubIp();
     getHubPort();
-    setState(() {
-      isHTTPS = isHTTPS;
-      portController.text = hubport ?? '';
-      ipController.text = hubip ?? '';
-    });
+    if (isThisFirstLoad == false && isThisSecondLoad == false) {
+      setState(() {
+        isHTTPS = isHTTPS;
+        portController.text = hubport ?? '';
+        ipController.text = hubip ?? '';
+      });
+      isThisFirstLoad = true;
+    } else if (isThisSecondLoad == false && isThisFirstLoad == true) {
+      setState(() {
+        isHTTPS = isHTTPS;
+        portController.text = hubport ?? '';
+        ipController.text = hubip ?? '';
+      });
+      isThisFirstLoad = true;
+      isThisSecondLoad = true;
+    } else {}
     print(
         'hubip: ${hubip} , hubport: ${hubport}, isHTTPS: ${isHTTPS}, hubip text: ${ipController.text}');
     return Scaffold(
@@ -147,10 +165,12 @@ class HubIPinputState_ extends State<HubIPinput> {
           hintText: 'Enter Hub IP',
           errorMaxLines: 3,
           errorText: showIPError ? ipFieldErrorText : null,
+
           //icon: Icon(Icons.account_tree_sharp),
           // iconColor: Colors.blueAccent,
         ),
         controller: ipController,
+        autocorrect: false,
         onSubmitted: (String value) async {
           hubip = value;
         },

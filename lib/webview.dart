@@ -49,6 +49,7 @@ class _WebAppState extends State<WebApp> {
       onWebResourceError: (error) async {
         print(await error.description);
         print(await error.failingUrl);
+
         int failingPort = Uri.parse(await error.failingUrl!).port;
         if (await error.description == 'net::ERR_UNSAFE_PORT') {
           setState(() {
@@ -65,8 +66,20 @@ class _WebAppState extends State<WebApp> {
           setState(() {
             showIPError = true;
             ipFieldErrorText =
+                'Hub is unreachable. Please check network connection or IP.';
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        } else {
+          setState(() {
+            showIPError = true;
+            ipFieldErrorText =
                 'Hub is unreachable. Please try double checking the IP and Port.';
           });
+          print(
+              'WebView Load URL Error: ${await error.description} for URL: ${httpState}://${hubip}:${hubport}');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
