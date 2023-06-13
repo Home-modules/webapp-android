@@ -1,6 +1,11 @@
-# HomeModules
+# Home_modules for Android 
 
 Android wrapper for Home_modules web app.
+
+## Pre-built APKs
+
+APK files are available at the releases section and in the actions section as artifacts. 
+
 ## Getting Started
 
 You can follow the following steps to build this app for yourself.
