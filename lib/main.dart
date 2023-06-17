@@ -54,6 +54,8 @@ Future setPrefs() async {
 }
 
 void main() {
+  //Initialize Logging
+
   runApp(const MyApp());
 }
 

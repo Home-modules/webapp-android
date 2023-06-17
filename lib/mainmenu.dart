@@ -71,6 +71,7 @@ class _MainMenuState extends State<MainMenu> {
     phoneScreenHeight = MediaQuery.of(context).size.height.toInt();
     // print(
     //    'Screen Height: ${phoneScreenHeight}px, phone screen width: ${phoneScreenWidth}px');
+
     loadStorage();
     getHTTPS();
     getHubIp();
@@ -161,31 +162,29 @@ class HubIPinput extends StatefulWidget {
 class HubIPinputState_ extends State<HubIPinput> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SizedBox(
-        width: 200,
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: inputfieldBorderOutter,
-                    bottomLeft: inputfieldBorderOutter,
-                    bottomRight: inputfieldBorderInner,
-                    topRight: inputfieldBorderInner)),
-            //labelText: 'Hub IP',
-            hintText: 'Enter Hub IP',
-            errorMaxLines: 3,
-            errorText: showIPError ? ipFieldErrorText : null,
+    return SizedBox(
+      width: 200,
+      child: TextField(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: inputfieldBorderOutter,
+                  bottomLeft: inputfieldBorderOutter,
+                  bottomRight: inputfieldBorderInner,
+                  topRight: inputfieldBorderInner)),
+          //labelText: 'Hub IP',
+          hintText: 'Enter Hub IP',
+          errorMaxLines: 3,
+          errorText: showIPError ? ipFieldErrorText : null,
 
-            //icon: Icon(Icons.account_tree_sharp),
-            // iconColor: Colors.blueAccent,
-          ),
-          controller: ipController,
-          autocorrect: false,
-          onSubmitted: (String value) async {
-            hubip = value;
-          },
+          //icon: Icon(Icons.account_tree_sharp),
+          // iconColor: Colors.blueAccent,
         ),
+        controller: ipController,
+        autocorrect: false,
+        onSubmitted: (String value) async {
+          hubip = value;
+        },
       ),
     );
   }
@@ -261,40 +260,38 @@ class GObutton extends StatefulWidget {
 class _GObuttonState extends State<GObutton> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SizedBox(
-          width: 300,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                // If the button is pressed, return green, otherwise blue
-                if (states.contains(MaterialState.pressed)) {
-                  return Color.fromRGBO(4, 100, 255, 1);
-                }
-                if (states.contains(MaterialState.hovered)) {
-                  return Color.fromRGBO(3, 83, 216, 1); // rgb(3, 83, 216)
-                }
+    return SizedBox(
+        width: 300,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith((states) {
+              // If the button is pressed, return green, otherwise blue
+              if (states.contains(MaterialState.pressed)) {
                 return Color.fromRGBO(4, 100, 255, 1);
-              }),
-            ),
-            child: Text('Continue'),
-            onPressed: () {
-              hubip = ipController.text;
-              hubport = portController.text;
-              setPrefs();
-              if (ipController.text.isEmpty || ipController.text.trim() == '') {
-                setState(() {
-                  showIPError = true;
-                  ipFieldErrorText = 'Hub IP cannot be empty';
-                });
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const WebApp()),
-                );
               }
-            },
-          )),
-    );
+              if (states.contains(MaterialState.hovered)) {
+                return Color.fromRGBO(3, 83, 216, 1); // rgb(3, 83, 216)
+              }
+              return Color.fromRGBO(4, 100, 255, 1);
+            }),
+          ),
+          child: Text('Continue'),
+          onPressed: () {
+            hubip = ipController.text;
+            hubport = portController.text;
+            setPrefs();
+            if (ipController.text.isEmpty || ipController.text.trim() == '') {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText = 'Hub IP cannot be empty';
+              });
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WebApp()),
+              );
+            }
+          },
+        ));
   }
 }
