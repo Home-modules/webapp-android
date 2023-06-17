@@ -19,10 +19,6 @@ bool showPortError = false;
 String? portFieldErrorText;
 bool showIPError = false;
 String? ipFieldErrorText;
-bool showUsernameError = false;
-String? usernameErrorText;
-bool showPasswordError = false;
-String? passwordFieldErrorText;
 var prefs;
 void loadStorage() async {
   prefs = await SharedPreferences.getInstance();
@@ -70,10 +66,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: const Color.fromARGB(255, 33, 71, 92),
+        scaffoldBackgroundColor: Color.fromRGBO(255, 255, 255, 1),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
-        //scaffoldBackgroundColor: Color.fromRGBO(0, 0, 0, 1),
+        scaffoldBackgroundColor: Color.fromRGBO(19, 19, 20, 1),
         primaryColor: Colors.lightBlue[800],
       ),
       home: HomePage(),

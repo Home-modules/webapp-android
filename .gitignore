@@ -25,6 +25,10 @@ key.properties
 # Visual Studio Code related
 .vscode/
 
+# Disabling unused build files
+macos/
+linux/
+windows/
 # Flutter/Dart/Pub related
 **/doc/api/
 .dart_tool/

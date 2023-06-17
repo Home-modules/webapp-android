@@ -41,51 +41,52 @@ class _WebAppState extends State<WebApp> {
     });
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
             child: WebViewPlus(
-      gestureNavigationEnabled: true,
-      initialUrl: '${httpState}://${hubip}:${hubport}',
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebResourceError: (error) async {
-        print(await error.description);
-        print(await error.failingUrl);
+          gestureNavigationEnabled: true,
+          initialUrl: '${httpState}://${hubip}:${hubport}',
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebResourceError: (error) async {
+            print(await error.description);
+            print(await error.failingUrl);
 
-        int failingPort = Uri.parse(await error.failingUrl!).port;
-        if (await error.description == 'net::ERR_UNSAFE_PORT') {
-          setState(() {
-            showPortError = true;
-            portFieldErrorText =
-                'The selected port is unsafe. Please change the port.';
-          });
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-          );
-        } else if (failingPort != 703 &&
-            await error.description == 'net::ERR_NAME_NOT_RESOLVED') {
-          setState(() {
-            showIPError = true;
-            ipFieldErrorText =
-                'Hub is unreachable. Please check network connection or IP.';
-          });
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-          );
-        } else {
-          setState(() {
-            showIPError = true;
-            ipFieldErrorText =
-                'Hub is unreachable. Please try double checking the IP and Port.';
-          });
-          print(
-              'WebView Load URL Error: ${await error.description} for URL: ${httpState}://${hubip}:${hubport}');
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-          );
-        }
-      },
-    )));
+            int failingPort = Uri.parse(await error.failingUrl!).port;
+            if (await error.description == 'net::ERR_UNSAFE_PORT') {
+              setState(() {
+                showPortError = true;
+                portFieldErrorText =
+                    'The selected port is unsafe. Please change the port.';
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            } else if (failingPort != 703 &&
+                await error.description == 'net::ERR_NAME_NOT_RESOLVED') {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText =
+                    'Hub is unreachable. Please check network connection or IP.';
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            } else {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText =
+                    'Hub is unreachable. Please try double checking the IP and Port.';
+              });
+              print(
+                  'WebView Load URL Error: ${await error.description} for URL: ${httpState}://${hubip}:${hubport}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            }
+          },
+        )));
   }
 }

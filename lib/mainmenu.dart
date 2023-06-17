@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, camel_case_types, avoid_print, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_constructors, camel_case_types, avoid_print, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, sort_child_properties_last, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'main.dart';
 import 'webview.dart';
 
@@ -92,52 +93,61 @@ class _MainMenuState extends State<MainMenu> {
     } else {}
     print(
         'hubip: ${hubip} , hubport: ${hubport}, isHTTPS: ${isHTTPS}, hubip text: ${ipController.text}');
-    return Scaffold(
-        resizeToAvoidBottomInset:
-            false, // overlays keyboards instead of pushing the screen
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-                child: Wrap(
-              children: [
-                Padding(
-                  child: Text('Hub IP'),
-                  padding: EdgeInsets.only(left: 5, right: 105),
-                ),
-                Padding(
-                  child: Text('Hub Port'),
-                  padding: EdgeInsets.only(left: 100, right: 5),
-                ),
-              ],
-            )),
-            Center(
-              child: Wrap(
+    return Container(
+      constraints: BoxConstraints(maxWidth: 400),
+      decoration: BoxDecoration(
+        backgroundBlendMode: BlendMode.color,
+        color: Colors.red,
+      ),
+      width: min(phoneScreenWidth! - 30, 400),
+      child: Scaffold(
+          resizeToAvoidBottomInset:
+              false, // overlays keyboards instead of pushing the screen
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                  child: Wrap(
                 children: [
                   Padding(
-                    padding: inputIPpadding,
-                    child: HubIPinput(),
+                    child: Text('Hub IP'),
+                    padding: EdgeInsets.only(left: 5, right: 105),
                   ),
                   Padding(
-                    padding: inputPORTpadding,
-                    child: HubPORTinput(),
+                    child: Text('Hub Port'),
+                    padding: EdgeInsets.only(left: 50, right: 5),
                   ),
                 ],
+              )),
+              Center(
+                child: Wrap(
+                  children: [
+                    Padding(
+                      padding: inputIPpadding,
+                      child: HubIPinput(),
+                    ),
+                    Padding(
+                      padding: inputPORTpadding,
+                      child: HubPORTinput(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Wrap(
-              children: [
-                isHTTPSinput(),
-                Padding(
-                    padding: EdgeInsets.only(top: 15), child: Text('Use HTTPS'))
-              ],
-            ),
-            Center(
-              child: GObutton(),
-            )
-          ],
-        ));
+              Wrap(
+                children: [
+                  isHTTPSinput(),
+                  Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Text('Use HTTPS'))
+                ],
+              ),
+              Center(
+                child: GObutton(),
+              )
+            ],
+          )),
+    );
   }
 }
 
@@ -151,29 +161,31 @@ class HubIPinput extends StatefulWidget {
 class HubIPinputState_ extends State<HubIPinput> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: TextField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: inputfieldBorderOutter,
-                  bottomLeft: inputfieldBorderOutter,
-                  bottomRight: inputfieldBorderInner,
-                  topRight: inputfieldBorderInner)),
-          //labelText: 'Hub IP',
-          hintText: 'Enter Hub IP',
-          errorMaxLines: 3,
-          errorText: showIPError ? ipFieldErrorText : null,
+    return Expanded(
+      child: SizedBox(
+        width: 200,
+        child: TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: inputfieldBorderOutter,
+                    bottomLeft: inputfieldBorderOutter,
+                    bottomRight: inputfieldBorderInner,
+                    topRight: inputfieldBorderInner)),
+            //labelText: 'Hub IP',
+            hintText: 'Enter Hub IP',
+            errorMaxLines: 3,
+            errorText: showIPError ? ipFieldErrorText : null,
 
-          //icon: Icon(Icons.account_tree_sharp),
-          // iconColor: Colors.blueAccent,
+            //icon: Icon(Icons.account_tree_sharp),
+            // iconColor: Colors.blueAccent,
+          ),
+          controller: ipController,
+          autocorrect: false,
+          onSubmitted: (String value) async {
+            hubip = value;
+          },
         ),
-        controller: ipController,
-        autocorrect: false,
-        onSubmitted: (String value) async {
-          hubip = value;
-        },
       ),
     );
   }
@@ -249,27 +261,40 @@ class GObutton extends StatefulWidget {
 class _GObuttonState extends State<GObutton> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 100,
-        child: ElevatedButton(
-          style: ButtonStyle(),
-          child: Text('Continue'),
-          onPressed: () {
-            hubip = ipController.text;
-            hubport = portController.text;
-            setPrefs();
-            if (ipController.text.isEmpty || ipController.text.trim() == '') {
-              setState(() {
-                showIPError = true;
-                ipFieldErrorText = 'Hub IP cannot be empty';
-              });
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WebApp()),
-              );
-            }
-          },
-        ));
+    return Expanded(
+      child: SizedBox(
+          width: 300,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                // If the button is pressed, return green, otherwise blue
+                if (states.contains(MaterialState.pressed)) {
+                  return Color.fromRGBO(4, 100, 255, 1);
+                }
+                if (states.contains(MaterialState.hovered)) {
+                  return Color.fromRGBO(3, 83, 216, 1); // rgb(3, 83, 216)
+                }
+                return Color.fromRGBO(4, 100, 255, 1);
+              }),
+            ),
+            child: Text('Continue'),
+            onPressed: () {
+              hubip = ipController.text;
+              hubport = portController.text;
+              setPrefs();
+              if (ipController.text.isEmpty || ipController.text.trim() == '') {
+                setState(() {
+                  showIPError = true;
+                  ipFieldErrorText = 'Hub IP cannot be empty';
+                });
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const WebApp()),
+                );
+              }
+            },
+          )),
+    );
   }
 }
