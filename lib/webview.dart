@@ -45,7 +45,7 @@ class _WebAppState extends State<WebApp> {
         body: SafeArea(
             child: WebViewPlus(
           gestureNavigationEnabled: true,
-          initialUrl: '${httpState}://${hubip}:${hubport}',
+          initialUrl: '${httpState}://${hubip}:${hubport}/webapp/',
           javascriptMode: JavascriptMode.unrestricted,
           onWebResourceError: (error) async {
             print(await error.description);
