@@ -14,7 +14,7 @@ You can follow the following steps to build this app for yourself.
 
 - [Git](https://git-scm.com/)
 - A text editor or IDE, like [VSCode](https://code.visualstudio.com/) or [Android Studio](https://developer.android.com/studio)
-- 
+  
 - Flutter extension
 
 - [Flutter SDK](https://flutter.dev)
