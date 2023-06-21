@@ -42,7 +42,7 @@ Future<String> getHubPort() async {
     skiptowebapp = false;
   else
     skiptowebapp = true;
-  hubport = await prefs.getString('hubport');
+  hubport = await prefs.getString('hubport') ?? 80;
   return 'done';
 }
 

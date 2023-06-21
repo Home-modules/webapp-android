@@ -11,7 +11,7 @@ late TextEditingController portController;
 late TextEditingController usernameController;
 late TextEditingController passwordController;
 
-// Might be changed later\
+// Might be changed later
 bool isThisFirstLoad = false;
 bool isThisSecondLoad = false;
 // Styling Vars
@@ -239,9 +239,10 @@ class _isHTTPSinputState extends State<isHTTPSinput> {
     return Checkbox(
       checkColor: Colors.white,
       fillColor: MaterialStateProperty.resolveWith(getColor),
-      value: false,
+      value: isHTTPS,
       onChanged: (value) {
         isHTTPS = value;
+        setPrefs();
         setState(() {
           value = isHTTPS;
         });
