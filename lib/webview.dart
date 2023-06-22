@@ -1,9 +1,12 @@
-// ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps, unused_import
+// ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps, unused_import, depend_on_referenced_packages
 
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:webview_flutter/webview_flutter.dart' as wem;
+
 import 'main.dart';
 
 class WebApp extends StatefulWidget {
@@ -40,10 +43,23 @@ class _WebAppState extends State<WebApp> {
       showPortError = false;
     });
 
+    wem.WebViewController? webView;
+    KeyboardVisibilityController keyboardVisibilityController =
+        KeyboardVisibilityController();
+
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      if (visible) {
+        // Scroll the field into view
+        webView!.runJavascript('''
+      // JavaScript code to scroll the field into view
+    ''');
+      }
+    });
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(
-            child: WebViewPlus(
+            child: wem.WebView(
           gestureNavigationEnabled: true,
           initialUrl: '${httpState}://${hubip}:${hubport}/webapp/',
           javascriptMode: JavascriptMode.unrestricted,
@@ -86,6 +102,9 @@ class _WebAppState extends State<WebApp> {
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
             }
+          },
+          onWebViewCreated: (controller) {
+            webView = controller;
           },
         )));
   }
