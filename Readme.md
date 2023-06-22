@@ -19,6 +19,8 @@ You can follow the following steps to build this app for yourself.
 
 - [Flutter SDK](https://flutter.dev)
 
+- **Optional**: A custom keystore file
+
 ### Building
 
 > **Warning**

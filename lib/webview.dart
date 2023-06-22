@@ -34,14 +34,17 @@ class _WebAppState extends State<WebApp> {
       }
     }
 
-    hubip = hubip!.trim();
+    hubip = hubip!.trim(); // remove whitespace
+
+    // Disables active errors
     setState(() {
       showIPError = false;
       showPortError = false;
     });
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset:
+            false, // Make keyboard overlay instead of pushing the screen
         body: SafeArea(
             child: WebViewPlus(
           gestureNavigationEnabled: true,
