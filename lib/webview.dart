@@ -52,7 +52,7 @@ class _WebAppState extends State<WebApp> {
         // Scroll the field into view
         webView!.runJavascript('''
       // JavaScript code to scroll the field into view
-      var activeElement = document.activeElement;
+      const activeElement = document.activeElement;
       if (activeElement) {
       activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
       }
