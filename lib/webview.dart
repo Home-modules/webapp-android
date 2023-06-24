@@ -50,6 +50,18 @@ class _WebAppState extends State<WebApp> {
           gestureNavigationEnabled: true,
           initialUrl: '${httpState}://${hubip}:${hubport}',
           javascriptMode: JavascriptMode.unrestricted,
+          javascriptChannels: {
+            JavascriptChannel(
+                name: 'goBack',
+                onMessageReceived: (JavascriptMessage message) async {
+                  if (message.message == 'goBackToIPscreen') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  }
+                })
+          },
           onWebResourceError: (error) async {
             print(await error.description);
             print(await error.failingUrl);
