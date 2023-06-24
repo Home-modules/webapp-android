@@ -31,7 +31,8 @@ You can follow the following steps to build this app for yourself.
 git clone https://github.com/Home-modules/webapp-android # clone the repo
 cd webapp-android # change directory into cloned repo
 flutter pub get # install plugins
-flutter build APK # build
+flutter build apk # build in release mode, Can be used for production
+flutter build apk --debug # build in debug mode, no keystore required. DON'T USE FOR PRODUCTION!
 ```
 
 The APK file will be in `build/app/outputs/app/flutter-apk/`
