@@ -69,6 +69,34 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     phoneScreenWidth = MediaQuery.of(context).size.width.toInt();
     phoneScreenHeight = MediaQuery.of(context).size.height.toInt();
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+    String theme = brightness == Brightness.dark ? 'dark' : 'light';
+    BoxDecoration? boxDecoration;
+    if (theme == 'dark') {
+      boxDecoration = BoxDecoration(
+        color: Color.fromARGB(1, 1, 1, 1),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            offset: Offset(2.0, 2.0),
+            blurRadius: 10.0,
+          ),
+        ],
+      );
+    } else if (theme == 'light') {
+      boxDecoration = BoxDecoration(
+        color: Color.fromRGBO(255, 255, 255, 1),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            offset: Offset(2.0, 2.0),
+            blurRadius: 10.0,
+          ),
+        ],
+      );
+    }
     // print(
     //    'Screen Height: ${phoneScreenHeight}px, phone screen width: ${phoneScreenWidth}px');
 
@@ -105,46 +133,63 @@ class _MainMenuState extends State<MainMenu> {
           resizeToAvoidBottomInset:
               false, // overlays keyboards instead of pushing the screen
           body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
-                  child: Wrap(
-                children: [
-                  Padding(
-                    child: Text('Hub IP'),
-                    padding: EdgeInsets.only(left: 5, right: 105),
-                  ),
-                  Padding(
-                    child: Text('Hub Port'),
-                    padding: EdgeInsets.only(left: 50, right: 5),
-                  ),
-                ],
-              )),
-              Center(
-                child: Wrap(
-                  children: [
-                    Padding(
-                      padding: inputIPpadding,
-                      child: HubIPinput(),
-                    ),
-                    Padding(
-                      padding: inputPORTpadding,
-                      child: HubPORTinput(),
-                    ),
-                  ],
-                ),
-              ),
-              Wrap(
-                children: [
-                  isHTTPSinput(),
-                  Padding(
-                      padding: EdgeInsets.only(top: 15),
-                      child: Text('Use HTTPS'))
-                ],
-              ),
-              Center(
-                child: GObutton(),
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        'Where is the hub?',
+                        style: TextStyle(fontSize: 40),
+                      ))),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: DecoratedBox(
+                    decoration: boxDecoration!,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10, top: 10),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Wrap(
+                              children: [
+                                SizedBox(width: 40),
+                                Text('Hub IP'),
+                                SizedBox(width: 165),
+                                Text('Hub Port'),
+                              ],
+                            ),
+                            Center(
+                              child: Wrap(
+                                children: [
+                                  Padding(
+                                    padding: inputIPpadding,
+                                    child: HubIPinput(),
+                                  ),
+                                  Padding(
+                                    padding: inputPORTpadding,
+                                    child: HubPORTinput(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Wrap(
+                              children: [
+                                SizedBox(
+                                  width: 40,
+                                ),
+                                isHTTPSinput(),
+                                Padding(
+                                    padding: EdgeInsets.only(top: 15),
+                                    child: Text('Use HTTPS'))
+                              ],
+                            ),
+                            Center(
+                              child: GObutton(),
+                            )
+                          ]),
+                    )),
               )
             ],
           )),

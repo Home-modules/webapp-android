@@ -67,8 +67,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: const Color.fromARGB(255, 33, 71, 92),
-        scaffoldBackgroundColor: Color.fromRGBO(255, 255, 255, 1),
+        // primaryColor: const Color.fromARGB(255, 33, 71, 92),
+        scaffoldBackgroundColor: Color.fromRGBO(245, 245, 245, 1),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
