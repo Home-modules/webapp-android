@@ -74,11 +74,11 @@ class _MainMenuState extends State<MainMenu> {
     BoxDecoration? boxDecoration;
     if (theme == 'dark') {
       boxDecoration = BoxDecoration(
-        color: Color.fromARGB(1, 1, 1, 1),
+        color: Color.fromARGB(255, 28, 28, 28),
         borderRadius: BorderRadius.all(Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withOpacity(0.2),
             offset: Offset(2.0, 2.0),
             blurRadius: 10.0,
           ),
@@ -141,7 +141,7 @@ class _MainMenuState extends State<MainMenu> {
                       padding: EdgeInsets.only(bottom: 20),
                       child: Text(
                         'Where is the hub?',
-                        style: TextStyle(fontSize: 40),
+                        style: TextStyle(fontSize: 40, fontFamily: 'Roboto'),
                       ))),
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
