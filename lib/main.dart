@@ -51,6 +51,7 @@ Future setPrefs() async {
   prefs.setString('hubport', hubport!);
 }
 
+
 Future<void> initializeApp() async {
   await loadStorage();
   getHubIp();
