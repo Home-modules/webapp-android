@@ -172,9 +172,9 @@ class _MainMenuState extends State<MainMenu> {
                             Wrap(
                               children: [
                                 SizedBox(width: 40),
-                                Text('Hub IP'),
+                                Text('IP'),
                                 SizedBox(width: 165),
-                                Text('Hub Port'),
+                                Text('Port'),
                               ],
                             ),
                             Center(
@@ -235,7 +235,7 @@ class HubIPinputState_ extends State<HubIPinput> {
                   bottomRight: inputfieldBorderInner,
                   topRight: inputfieldBorderInner)),
           //labelText: 'Hub IP',
-          hintText: 'Enter Hub IP',
+          hintText: 'Enter IP',
           errorMaxLines: 3,
           errorText: showIPError ? ipFieldErrorText : null,
 
@@ -274,7 +274,7 @@ class _HubPORTinputState extends State<HubPORTinput> {
                   topLeft: inputfieldBorderInner),
             ),
             //labelText: 'Hub Port',
-            hintText: 'Enter Hub Port',
+            hintText: 'Enter Port',
             hintStyle: TextStyle(fontSize: 15),
             errorMaxLines: 4,
             errorText: showPortError ? portFieldErrorText : null,
@@ -347,6 +347,17 @@ class _GObuttonState extends State<GObutton> {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText = 'Hub IP cannot be empty';
+              });
+            } else if (ipController.text.length > 50) {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText = 'IP is too long, try to reduce it';
+              });
+            } else if (portController.text.length > 5) {
+              setState(() {
+                showPortError = true;
+                portFieldErrorText =
+                    'Port is too big! It should be smaller than 5 digits';
               });
             } else {
               Navigator.push(
