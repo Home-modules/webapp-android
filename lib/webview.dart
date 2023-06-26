@@ -124,6 +124,7 @@ class _WebAppState extends State<WebApp> {
           },
           onWebViewCreated: (controller) {
             webView = controller;
+            webView!.runJavascript('window.flutterWrapper =  { }');
           },
         )));
   }
