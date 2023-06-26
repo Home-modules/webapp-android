@@ -20,30 +20,28 @@ String? portFieldErrorText;
 bool showIPError = false;
 String? ipFieldErrorText;
 var prefs;
-void loadStorage() async {
+
+Future<void> loadStorage() async {
   prefs = await SharedPreferences.getInstance();
 }
 
 Future<bool> getHTTPS() async {
-  prefs = await SharedPreferences.getInstance();
-  isHTTPS = await prefs.getBool('isHTTPS') ?? false;
-  return prefs.getBool('isHTTPS') ?? false;
+  isHTTPS = (await prefs.getBool('isHTTPS')) ?? false;
+  return isHTTPS!;
 }
 
 Future<String> getHubIp() async {
-  prefs = await SharedPreferences.getInstance();
   hubip = await prefs.getString('hubip');
-  return prefs.getString('hubip') ?? '';
+  return hubip!;
 }
 
 Future<String> getHubPort() async {
-  prefs = await SharedPreferences.getInstance();
   if (await prefs.getString('hubport') == null)
     skiptowebapp = false;
   else
     skiptowebapp = true;
   hubport = await prefs.getString('hubport') ?? 80;
-  return 'done';
+  return hubport!;
 }
 
 Future setPrefs() async {
@@ -53,7 +51,17 @@ Future setPrefs() async {
   prefs.setString('hubport', hubport!);
 }
 
-void main() {
+
+Future<void> initializeApp() async {
+  await loadStorage();
+  getHubIp();
+  getHubPort();
+  getHTTPS();
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeApp();
   runApp(const MyApp());
 }
 
@@ -65,8 +73,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: const Color.fromARGB(255, 33, 71, 92),
-        scaffoldBackgroundColor: Color.fromRGBO(255, 255, 255, 1),
+        // primaryColor: const Color.fromARGB(255, 33, 71, 92),
+        scaffoldBackgroundColor: Color.fromRGBO(245, 245, 245, 1),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -88,7 +96,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    loadStorage();
     return MainMenu();
   }
 }

@@ -37,7 +37,9 @@ class _WebAppState extends State<WebApp> {
       }
     }
 
-    hubip = hubip!.trim();
+    hubip = hubip!.trim(); // remove whitespace
+
+    // Disables active errors
     setState(() {
       showIPError = false;
       showPortError = false;
@@ -61,12 +63,25 @@ class _WebAppState extends State<WebApp> {
     });
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset:
+            false, // Make keyboard overlay instead of pushing the screen
         body: SafeArea(
             child: wem.WebView(
           gestureNavigationEnabled: true,
           initialUrl: '${httpState}://${hubip}:${hubport}/webapp/',
           javascriptMode: JavascriptMode.unrestricted,
+          javascriptChannels: {
+            JavascriptChannel(
+                name: 'goBack',
+                onMessageReceived: (JavascriptMessage message) async {
+                  if (message.message == 'goBackToIPscreen') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  }
+                })
+          },
           onWebResourceError: (error) async {
             print(await error.description);
             print(await error.failingUrl);
