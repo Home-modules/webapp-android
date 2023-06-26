@@ -5,6 +5,7 @@ import 'dart:math';
 import 'main.dart';
 import 'webview.dart';
 
+bool alreadyWebApp = false;
 // Global stuff
 late TextEditingController ipController;
 late TextEditingController portController;
@@ -25,6 +26,16 @@ EdgeInsets inputPORTpadding =
 // Unused for now
 int? phoneScreenWidth;
 int? phoneScreenHeight;
+void skiptoWebAppF(BuildContext context) async {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const WebApp()),
+  );
+}
+
+Future<void> ssk(BuildContext context) async {
+  skiptoWebAppF(context);
+}
 
 // Used for Checkbox stuff
 Color getColor(Set<MaterialState> states) {
@@ -52,16 +63,26 @@ class _MainMenuState extends State<MainMenu> {
     super.initState();
     ipController = TextEditingController();
     portController = TextEditingController();
-    usernameController = TextEditingController();
-    passwordController = TextEditingController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (skiptowebapp! && alreadyWebApp == false) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => WebApp()),
+        );
+
+        alreadyWebApp = true;
+      }
+    });
   }
 
   @override
   void dispose() {
-    ipController.dispose();
-    portController.dispose();
-    usernameController.dispose();
-    passwordController.dispose();
+    if (alreadyWebApp) {
+    } else {
+      ipController.dispose();
+      portController.dispose();
+    }
     super.dispose();
   }
 
@@ -100,10 +121,6 @@ class _MainMenuState extends State<MainMenu> {
     // print(
     //    'Screen Height: ${phoneScreenHeight}px, phone screen width: ${phoneScreenWidth}px');
 
-    loadStorage();
-    getHTTPS();
-    getHubIp();
-    getHubPort();
     if (isThisFirstLoad == false && isThisSecondLoad == false) {
       setState(() {
         isHTTPS = isHTTPS;
