@@ -91,7 +91,7 @@ class _WebAppState extends State<WebApp> {
               setState(() {
                 showPortError = true;
                 portFieldErrorText =
-                    'The selected port is unsafe. Please change the port.';
+                    'The selected port is unsafe. Please change the port';
               });
               Navigator.push(
                 context,
@@ -102,7 +102,25 @@ class _WebAppState extends State<WebApp> {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText =
-                    'Hub is unreachable. Please check network connection or IP.';
+                    'Hub is unreachable. Please check network connection or IP';
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            } else if (error.description == 'net::ERR_SSL_PROTOCOL_ERROR') {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText = 'Wrongly used HTTPS';
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            } else if (error.description == 'net::ERR_CONNECTION_REFUSED') {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText = 'Invalid port or hub isn\'t running';
               });
               Navigator.push(
                 context,
@@ -112,10 +130,10 @@ class _WebAppState extends State<WebApp> {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText =
-                    'Hub is unreachable. Please try double checking the IP and Port.';
+                    'Hub is unreachable. Please try double checking the IP and Port or see if the hub is running';
               });
               print(
-                  'WebView Load URL Error: ${await error.description} for URL: ${httpState}://${hubip}:${hubport}');
+                  'WebView Load URL Error: ${await error.description} for URL: ${httpState}://${hubip}:${hubport}/webapp');
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage()),
