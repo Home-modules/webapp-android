@@ -126,6 +126,16 @@ class _WebAppState extends State<WebApp> {
                 context,
                 MaterialPageRoute(builder: (context) => const HomePage()),
               );
+            } else if (error.description == 'net::ERR_CONNECTION_TIMED_OUT') {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText =
+                    'Hub timed out, check your netwrok connection';
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
             } else {
               setState(() {
                 showIPError = true;
@@ -142,7 +152,14 @@ class _WebAppState extends State<WebApp> {
           },
           onWebViewCreated: (controller) {
             webView = controller;
-            webView!.runJavascript('window.flutterWrapper =  { }');
+            webView!.runJavascript('''
+            window.flutterWrapper =  { 
+              goToIPScreen() {
+                if (goBack) {
+                  goBack.postMessage('goBackToIPscreen');
+                }
+              }
+            }''');
           },
         )));
   }
