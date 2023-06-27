@@ -6,6 +6,7 @@ import 'main.dart';
 import 'webview.dart';
 
 bool alreadyWebApp = false;
+isNumeric(string) => num.tryParse(string) != null;
 // Global stuff
 late TextEditingController ipController;
 late TextEditingController portController;
@@ -359,11 +360,30 @@ class _GObuttonState extends State<GObutton> {
                 portFieldErrorText =
                     'Port is too big! It should be smaller than 5 digits';
               });
+            } else if (ipController.text.contains(' ')) {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText = 'Hub IP cannot include whitespace';
+              });
             } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WebApp()),
-              );
+              if (isNumeric(portController.text)) {
+                if (int.parse(portController.text) > 65535) {
+                  setState(() {
+                    showPortError = true;
+                    portFieldErrorText = 'Port cannot be bigger than 65,535';
+                  });
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const WebApp()),
+                  );
+                }
+              } else {
+                setState(() {
+                  showPortError = true;
+                  portFieldErrorText = 'Port cannot contain any letters';
+                });
+              }
             }
           },
         ));
