@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'mainmenu.dart';
+import 'webview.dart';
 
 // Used as settings
 String? hubip;
@@ -13,7 +14,7 @@ String? username;
 String? password;
 bool? isHTTPS = false;
 bool? skiptowebapp = false;
-
+bool alreadyWebApp = false;
 // Used for error handling
 bool showPortError = false;
 String? portFieldErrorText;
@@ -51,7 +52,6 @@ Future setPrefs() async {
   prefs.setString('hubport', hubport!);
 }
 
-
 Future<void> initializeApp() async {
   await loadStorage();
   getHubIp();
@@ -60,7 +60,8 @@ Future<void> initializeApp() async {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding
+      .ensureInitialized(); // function name suggests what it does
   await initializeApp();
   runApp(const MyApp());
 }
@@ -96,6 +97,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    @override
+    void initState() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (skiptowebapp! && alreadyWebApp == false) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => WebApp()),
+          );
+          alreadyWebApp = true;
+        }
+      });
+    }
+
+    initState();
     return MainMenu();
   }
 }

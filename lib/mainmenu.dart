@@ -5,7 +5,6 @@ import 'dart:math';
 import 'main.dart';
 import 'webview.dart';
 
-bool alreadyWebApp = false;
 isNumeric(string) => num.tryParse(string) != null;
 // Global stuff
 late TextEditingController ipController;
