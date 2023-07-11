@@ -1,7 +1,7 @@
 // ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps, unused_import, depend_on_referenced_packages
 
 import 'dart:io';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -16,8 +16,11 @@ class WebApp extends StatefulWidget {
   State<WebApp> createState() => _WebAppState();
 }
 
-// WebViewPlusController? webViewPlusController;
-// Unused WebViewController, might be used later
+void startTimer() {
+  Timer(Duration(seconds: 5), () {
+    print('g');
+  });
+}
 
 class _WebAppState extends State<WebApp> {
   @override
