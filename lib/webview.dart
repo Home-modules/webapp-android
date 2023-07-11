@@ -18,7 +18,7 @@ class WebApp extends StatefulWidget {
 
 void startTimer() {
   Timer(Duration(seconds: 5), () {
-    print('g');
+    // See if target IP is reachable
   });
 }
 
