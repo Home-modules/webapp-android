@@ -1,4 +1,4 @@
-// ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps, unused_import, depend_on_referenced_packages
+// ignore_for_file: await_only_futures, avoid_print, use_build_context_synchronously, unnecessary_brace_in_string_interps, unused_import, depend_on_referenced_packages, prefer_const_constructors
 
 import 'dart:io';
 import 'dart:async';
