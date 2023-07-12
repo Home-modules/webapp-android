@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:ping_discover_network_forked/ping_discover_network_forked.dart';
 import 'package:webview_flutter/webview_flutter.dart' as wem;
 
 import 'main.dart';

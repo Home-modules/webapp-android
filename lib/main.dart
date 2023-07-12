@@ -32,7 +32,7 @@ Future<bool> getHTTPS() async {
 }
 
 Future<String> getHubIp() async {
-  hubip = await prefs.getString('hubip');
+  hubip = await prefs.getString('hubip') ?? '';
   return hubip!;
 }
 
@@ -41,7 +41,7 @@ Future<String> getHubPort() async {
     skiptowebapp = false;
   else
     skiptowebapp = true;
-  hubport = await prefs.getString('hubport') ?? 80;
+  hubport = await prefs.getString('hubport') ?? '80';
   return hubport!;
 }
 

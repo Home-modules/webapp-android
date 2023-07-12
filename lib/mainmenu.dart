@@ -348,7 +348,7 @@ class _GObuttonState extends State<GObutton> {
                 showIPError = true;
                 ipFieldErrorText = 'Hub IP cannot be empty';
               });
-            } else if (ipController.text.length > 50) {
+            } else if (ipController.text.length > 20) {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText = 'IP is too long, try to reduce it';
