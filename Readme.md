@@ -2,6 +2,8 @@
 
 Android wrapper for Home_modules web app.
 
+## "Dev" branch
+We are working on adding ability to access your smart devices via Android's built-in Smart Home platform introduced in Android 11
 ## Pre-built APKs
 
 APK files are available at the releases section and in the actions section as artifacts.
