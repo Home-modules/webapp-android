@@ -2,15 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter/services.dart';
 import 'main.dart';
 import 'webview.dart';
+
+// Init Device Controls
+const platform = MethodChannel('com.homemodules/device-controls');
+Future<void> getMsg() async {
+  try {
+    print(await platform.invokeMethod('getMessage'));
+  } on PlatformException catch (e) {
+    print(e.message);
+  }
+}
 
 // Global stuff
 late TextEditingController ipController;
 late TextEditingController portController;
-late TextEditingController usernameController;
-late TextEditingController passwordController;
-
 // Might be changed later
 bool isThisFirstLoad = false;
 bool isThisSecondLoad = false;
@@ -52,16 +60,12 @@ class _MainMenuState extends State<MainMenu> {
     super.initState();
     ipController = TextEditingController();
     portController = TextEditingController();
-    usernameController = TextEditingController();
-    passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
     ipController.dispose();
     portController.dispose();
-    usernameController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -104,6 +108,7 @@ class _MainMenuState extends State<MainMenu> {
     getHTTPS();
     getHubIp();
     getHubPort();
+    getMsg();
     if (isThisFirstLoad == false && isThisSecondLoad == false) {
       setState(() {
         isHTTPS = isHTTPS;
