@@ -1,3 +1,5 @@
+package com.homemodules
+
 import com.homemodules.MainActivity
 import android.service.controls.Control
 import android.service.controls.ControlsProviderService

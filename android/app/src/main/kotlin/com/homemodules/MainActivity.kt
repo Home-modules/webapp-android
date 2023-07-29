@@ -4,7 +4,7 @@ import androidx.annotation.NonNull
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.embedding.android.FlutterActivity
-// import com.homemodules.hmDevCtrlService
+import com.homemodules.hmDevCtrlService
 class MainActivity: FlutterActivity() {
     private val channel = "com.homemodules/device-controls";
 
