@@ -34,7 +34,6 @@ private val scope = CoroutineScope(Dispatchers.IO + job)
 private val controlFlows = mutableMapOf<String, MutableSharedFlow<Control>>()
 
 private var toggleState = false
-private var rangeState = 18f
 
 class hmDevCtrlService : ControlsProviderService() {
 
