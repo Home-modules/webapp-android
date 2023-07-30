@@ -64,11 +64,13 @@ class hmDevCtrlService : ControlsProviderService() {
 
         controlIds.forEach { controlFlows[it] = flow }
 
+        val light = createLight();
+
         scope.launch {
             delay(1000) // Retrieving the toggle state.
-            flow.tryEmit(createLight())
+            flow.tryEmit(light)
         }
-        return Flow.Publisher<Control> {}
+        return Flow.Publisher<Control> { (light) }
     }
     @OptIn(kotlin.ExperimentalStdlibApi::class)
     private fun createLight() = createStatefulControl(
