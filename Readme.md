@@ -29,7 +29,7 @@ You can follow the following steps to build this app for yourself.
 
 > **Warning**
 >
-> As of newer versions, release build process requires a custom keysotre. You have to create & add the keystore on your own, or delete the code related to keystore in `android/app/build.gradle`
+> As of newer versions, release build process requires a custom keystore. You have to create & add the keystore on your own, or delete the code related to keystore in `android/app/build.gradle`
 >
 > You can still build the app in debug mode
 
