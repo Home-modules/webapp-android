@@ -75,7 +75,6 @@ class _MainMenuState extends State<MainMenu> {
     ipController = TextEditingController();
     portController = TextEditingController();
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (skiptowebapp! && alreadyWebApp == false) {
         Navigator.pushReplacement(
@@ -86,7 +85,6 @@ class _MainMenuState extends State<MainMenu> {
         alreadyWebApp = true;
       }
     });
-
   }
 
   @override
@@ -169,83 +167,86 @@ class _MainMenuState extends State<MainMenu> {
       child: Scaffold(
         resizeToAvoidBottomInset:
             false, // overlays keyboards instead of pushing the screen
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-                child: Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      'Where is the hub?',
-                      style: TextStyle(fontSize: 40, fontFamily: 'RobotoBold'),
-                    ))),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: DecoratedBox(
-                decoration: boxDecoration!,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Hub IP'),
-                                        HubIPinput(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Hub Port'),
-                                        HubPORTinput(),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    isHTTPSinput(),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 3),
-                                      child: Text('Use HTTPS'),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Center(
-                              child: GObutton(),
-                            )
-                          ],
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                  child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        'Where is the hub?',
+                        style:
+                            TextStyle(fontSize: 40, fontFamily: 'RobotoBold'),
+                      ))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: DecoratedBox(
+                  decoration: boxDecoration!,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Hub IP'),
+                                          HubIPinput(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Hub Port'),
+                                          HubPORTinput(),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      isHTTPSinput(),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 3),
+                                        child: Text('Use HTTPS'),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Center(
+                                child: GObutton(),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -399,6 +400,5 @@ class _GObuttonState extends State<GObutton> {
         },
       ),
     );
-
   }
 }
