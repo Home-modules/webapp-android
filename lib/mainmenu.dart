@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, camel_case_types, avoid_print, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, sort_child_properties_last, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, camel_case_types, avoid_print, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'main.dart';
 import 'webview.dart';
 
-// Init Device Controls
+// Init Device Controls (not used)
 const platform = MethodChannel('com.homemodules/device-controls');
 Future<void> getMsg() async {
   try {
@@ -30,10 +30,12 @@ EdgeInsets inputIPpadding =
 EdgeInsets inputPORTpadding =
     EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5);
 
-// Unused for now
+// idk
 int? phoneScreenWidth;
 int? phoneScreenHeight;
 
+// idk v2
+int? contentWidth;
 // Used for Checkbox stuff
 Color getColor(Set<MaterialState> states) {
   const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -135,69 +137,87 @@ class _MainMenuState extends State<MainMenu> {
       ),
       width: min(phoneScreenWidth! - 30, 400),
       child: Scaffold(
-          resizeToAvoidBottomInset:
-              false, // overlays keyboards instead of pushing the screen
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                  child: Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        'Where is the hub?',
-                        style: TextStyle(fontSize: 40, fontFamily: 'Roboto'),
-                      ))),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: DecoratedBox(
-                    decoration: boxDecoration!,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10, top: 10),
-                      child: Column(
+        resizeToAvoidBottomInset:
+            false, // overlays keyboards instead of pushing the screen
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      'Where is the hub?',
+                      style: TextStyle(fontSize: 40, fontFamily: 'RobotoBold'),
+                    ))),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: DecoratedBox(
+                decoration: boxDecoration!,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 10),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.start,
                               children: [
-                                SizedBox(width: 40),
-                                Text('Hub IP'),
-                                SizedBox(width: 165),
-                                Text('Hub Port'),
-                              ],
-                            ),
-                            Center(
-                              child: Wrap(
-                                children: [
-                                  Padding(
-                                    padding: inputIPpadding,
-                                    child: HubIPinput(),
-                                  ),
-                                  Padding(
-                                    padding: inputPORTpadding,
-                                    child: HubPORTinput(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Wrap(
-                              children: [
-                                SizedBox(
-                                  width: 40,
+                                Row(
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Hub IP'),
+                                        HubIPinput(),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Hub Port'),
+                                        HubPORTinput(),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                isHTTPSinput(),
-                                Padding(
-                                    padding: EdgeInsets.only(top: 15),
-                                    child: Text('Use HTTPS'))
+                                Row(
+                                  children: [
+                                    isHTTPSinput(),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 3),
+                                      child: Text('Use HTTPS'),
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
                             Center(
                               child: GObutton(),
                             )
-                          ]),
-                    )),
-              )
-            ],
-          )),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -311,38 +331,43 @@ class GObutton extends StatefulWidget {
 class _GObuttonState extends State<GObutton> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 300,
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith((states) {
-              // If the button is pressed, return green, otherwise blue
-              if (states.contains(MaterialState.pressed)) {
-                return Color.fromRGBO(4, 100, 255, 1);
-              }
-              if (states.contains(MaterialState.hovered)) {
-                return Color.fromRGBO(3, 83, 216, 1); // rgb(3, 83, 216)
-              }
-              return Color.fromRGBO(4, 100, 255, 1);
-            }),
+    return Container(
+      decoration: BoxDecoration(
+          color: Color.fromRGBO(4, 100, 255, 1),
+          borderRadius: BorderRadius.circular(8)),
+      child: GestureDetector(
+        child: SizedBox(
+          width: double.infinity,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Continue',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
-          child: Text('Continue'),
-          onPressed: () {
-            hubip = ipController.text;
-            hubport = portController.text;
-            setPrefs();
-            if (ipController.text.isEmpty || ipController.text.trim() == '') {
-              setState(() {
-                showIPError = true;
-                ipFieldErrorText = 'Hub IP cannot be empty';
-              });
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WebApp()),
-              );
-            }
-          },
-        ));
+        ),
+        onTap: () {
+          hubip = ipController.text;
+          hubport = portController.text;
+          setPrefs();
+          if (ipController.text.isEmpty || ipController.text.trim() == '') {
+            setState(() {
+              showIPError = true;
+              ipFieldErrorText = 'Hub IP cannot be empty';
+            });
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const WebApp()),
+            );
+          }
+        },
+      ),
+    );
   }
 }

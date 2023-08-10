@@ -13,7 +13,7 @@ class MainActivity: FlutterActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger , channel).setMethodCallHandler {
             call, result -> 
             if (call.method == "getMessage") {
-                val message = "Hi! I am fine";
+                val message = "Who tf said I'm fine?";
                 if (message.isNotEmpty()) {
                     result.success(message);
                 } else {

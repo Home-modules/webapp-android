@@ -8,9 +8,6 @@ import android.service.controls.DeviceTypes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -19,7 +16,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
-// import java.util.concurrent.Flow
+import java.util.concurrent.Flow
 import java.util.concurrent.Flow.Publisher
 import android.provider.AlarmClock.EXTRA_MESSAGE
 import java.util.function.Consumer
@@ -37,11 +34,14 @@ private val scope = CoroutineScope(Dispatchers.IO + job)
 private val controlFlows = mutableMapOf<String, MutableSharedFlow<Control>>()
 
 private var toggleState = false
+private var rangeState = 18f
 
 class hmDevCtrlService : ControlsProviderService() {
 
-    override fun createPublisherForAllAvailable(): Flow<Control> {
-        return listOf(createStatelessControl(LIGHT_ID, LIGHT_TITLE, LIGHT_TYPE)).asFlow()
+    override fun createPublisherForAllAvailable(): Flow.Publisher<Control> {
+        return Flow.Publisher {
+            (createStatelessControl(LIGHT_ID, LIGHT_TITLE, LIGHT_TYPE))
+        }
     }
     private fun createStatelessControl(id: Int, title: String, type: Int): Control {
         val intent = Intent(this, MainActivity::class.java)
@@ -65,13 +65,11 @@ class hmDevCtrlService : ControlsProviderService() {
 
         controlIds.forEach { controlFlows[it] = flow }
 
-        val light = createLight();
-
         scope.launch {
             delay(1000) // Retrieving the toggle state.
-            flow.tryEmit(light)
+            flow.tryEmit(createLight())
         }
-        return flow.asFlow()
+        return Flow.Publisher<Control> {}
     }
     @OptIn(kotlin.ExperimentalStdlibApi::class)
     private fun createLight() = createStatefulControl(
@@ -87,7 +85,7 @@ class hmDevCtrlService : ControlsProviderService() {
             )
         )
     )
-    private fun  createStatefulControl(id: Int, title: String, type: Int, state: Boolean, template: ToggleTemplate): Control {
+    private fun  createStatefulControl(id: Int, title: String, type: Int, state: Boolean, template: ControlTemplate): Control {
         val intent = Intent(this, MainActivity::class.java)
             .putExtra(EXTRA_MESSAGE, "$title $state")
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -119,7 +117,7 @@ class hmDevCtrlService : ControlsProviderService() {
             when (controlId) {
                 LIGHT_ID.toString() -> {
                     consumer.accept(ControlAction.RESPONSE_OK)
-                    toggleState = !toggleState
+                    // if (action is ControlAction) toggleState = action.newState
                     flow.tryEmit(createLight())
                 }
                 else -> {
