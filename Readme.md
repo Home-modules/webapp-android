@@ -40,7 +40,12 @@ flutter pub get # install plugins
 flutter build apk # build in release mode, Can be used for production
 flutter build apk --debug # build in debug mode, no keystore required. DON'T USE FOR PRODUCTION!
 ```
+Alternatively, you can use `makefile`:
 
+```bash
+make build # Builds the app in release mode, requires a custom keystore
+make build-dev # Builds the app in debug mode, doesn't require keystore
+```
 The APK file will be in `build/app/outputs/app/flutter-apk/`
 
 ### Contributing
