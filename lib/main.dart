@@ -20,6 +20,7 @@ bool showPortError = false;
 String? portFieldErrorText;
 bool showIPError = false;
 String? ipFieldErrorText;
+// instance of local storage
 var prefs;
 
 Future<void> loadStorage() async {
