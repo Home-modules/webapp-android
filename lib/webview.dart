@@ -91,7 +91,7 @@ class _WebAppState extends State<WebApp> {
               setState(() {
                 showPortError = true;
                 portFieldErrorText =
-                    'The selected port is unsafe. Please change the port.';
+                    'The selected port is invalid.';
               });
               Navigator.push(
                 context,
@@ -102,7 +102,7 @@ class _WebAppState extends State<WebApp> {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText =
-                    'Hub is unreachable. Please check network connection or IP.';
+                    'The hub is unreachable. Please check your network connection and IP address.';
               });
               Navigator.push(
                 context,
@@ -112,7 +112,7 @@ class _WebAppState extends State<WebApp> {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText =
-                    'Hub is unreachable. Please try double checking the IP and Port.';
+                    'The hub is unreachable. Double check the IP address and port.';
               });
               print(
                   'WebView Load URL Error: ${await error.description} for URL: ${httpState}://${hubip}:${hubport}');
