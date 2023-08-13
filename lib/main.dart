@@ -84,6 +84,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.lightBlue[800],
       ),
       home: HomePage(),
+      title: "Home_modules"
     );
   }
 }
