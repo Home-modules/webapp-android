@@ -27,12 +27,10 @@ bool isThisSecondLoad = false;
 // Styling Vars
 Radius inputfieldBorderOutter = Radius.circular(8);
 Radius inputfieldBorderInner = Radius.circular(0);
-EdgeInsets inputIPpadding =
-    EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 0);
-EdgeInsets inputPORTpadding =
-    EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5);
+EdgeInsets inputPadding = 
+  EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0);
 
-// idk
+// Unused for now
 int? phoneScreenWidth;
 int? phoneScreenHeight;
 void skiptoWebAppF(BuildContext context) async {
@@ -46,8 +44,6 @@ Future<void> ssk(BuildContext context) async {
   skiptoWebAppF(context);
 }
 
-// idk v2
-int? contentWidth;
 // Used for Checkbox stuff
 Color getColor(Set<MaterialState> states) {
   const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -158,17 +154,15 @@ class _MainMenuState extends State<MainMenu> {
     print(
         'hubip: ${hubip} , hubport: ${hubport}, isHTTPS: ${isHTTPS}, hubip text: ${ipController.text}');
     return Container(
-      constraints: BoxConstraints(maxWidth: 400),
       decoration: BoxDecoration(
         backgroundBlendMode: BlendMode.color,
         color: Colors.red,
       ),
-      width: min(phoneScreenWidth! - 30, 400),
       child: Scaffold(
-        resizeToAvoidBottomInset:
-            false, // overlays keyboards instead of pushing the screen
-        body: Center(
-          child: Column(
+          resizeToAvoidBottomInset:
+              false, // overlays keyboards instead of pushing the screen
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
@@ -176,79 +170,65 @@ class _MainMenuState extends State<MainMenu> {
                       padding: EdgeInsets.only(bottom: 20),
                       child: Text(
                         'Where is the hub?',
-                        style:
-                            TextStyle(fontSize: 40, fontFamily: 'RobotoBold'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 40, fontFamily: 'Roboto'),
                       ))),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: DecoratedBox(
-                  decoration: boxDecoration!,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Container(
+                    width: min(phoneScreenWidth! - 30, 400),
+                    child: DecoratedBox(
+                        decoration: boxDecoration!,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text('Hub IP'),
-                                          HubIPinput(),
+                                          Text("IP Address"),
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 5.0),
+                                            child: HubIPinput(),
+                                          ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Column(
+                                    ),
+                                    Container(
+                                      width: 80,
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text('Hub Port'),
+                                          Text("Port"),
                                           HubPORTinput(),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                  Row(
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  child: Wrap(
+                                    crossAxisAlignment: WrapCrossAlignment.center,
                                     children: [
-                                      isHTTPSinput(),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 3),
-                                        child: Text('Use HTTPS'),
-                                      )
+                                      isHTTPSinput(), 
+                                      Text('Use HTTPS')
                                     ],
-                                  ),
-                                ],
-                              ),
-                              Center(
-                                child: GObutton(),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                                  )
+                                ),
+                                GObutton()
+                              ]),
+                        ))),
+              )
             ],
-          ),
-        ),
-      ),
+          )),
     );
   }
 }
@@ -263,9 +243,7 @@ class HubIPinput extends StatefulWidget {
 class HubIPinputState_ extends State<HubIPinput> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: TextField(
+    return TextField(
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: BorderRadius.only(
@@ -277,7 +255,7 @@ class HubIPinputState_ extends State<HubIPinput> {
           hintText: 'Enter IP',
           errorMaxLines: 3,
           errorText: showIPError ? ipFieldErrorText : null,
-
+          contentPadding: inputPadding,
           //icon: Icon(Icons.account_tree_sharp),
           // iconColor: Colors.blueAccent,
         ),
@@ -286,7 +264,6 @@ class HubIPinputState_ extends State<HubIPinput> {
         onSubmitted: (String value) async {
           hubip = value;
         },
-      ),
     );
   }
 }
@@ -301,9 +278,7 @@ class HubPORTinput extends StatefulWidget {
 class _HubPORTinputState extends State<HubPORTinput> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 100,
-        child: TextField(
+    return TextField(
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.only(
@@ -316,6 +291,7 @@ class _HubPORTinputState extends State<HubPORTinput> {
             hintText: 'Enter Port',
             hintStyle: TextStyle(fontSize: 15),
             errorMaxLines: 4,
+            contentPadding: inputPadding,
             errorText: showPortError ? portFieldErrorText : null,
           ),
           controller: portController,
@@ -323,7 +299,7 @@ class _HubPORTinputState extends State<HubPORTinput> {
           onSubmitted: (String value) {
             hubport = value;
           },
-        ));
+        );
   }
 }
 
@@ -362,43 +338,44 @@ class GObutton extends StatefulWidget {
 class _GObuttonState extends State<GObutton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Color.fromRGBO(4, 100, 255, 1),
-          borderRadius: BorderRadius.circular(8)),
-      child: GestureDetector(
-        child: SizedBox(
-          width: double.infinity,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Continue',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
+    return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                // If the button is pressed, return green, otherwise blue
+                if (states.contains(MaterialState.pressed)) {
+                  return Color.fromRGBO(4, 100, 255, 1);
+                }
+                if (states.contains(MaterialState.hovered)) {
+                  return Color.fromRGBO(3, 83, 216, 1); // rgb(3, 83, 216)
+                }
+                return Color.fromRGBO(4, 100, 255, 1);
+              }),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.all(20.0),
               ),
-            ),
-          ),
-        ),
-        onTap: () {
-          hubip = ipController.text;
-          hubport = portController.text;
-          setPrefs();
-          if (ipController.text.isEmpty || ipController.text.trim() == '') {
-            setState(() {
-              showIPError = true;
-              ipFieldErrorText = 'Hub IP cannot be empty';
-            });
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const WebApp()),
-            );
-          }
-        },
-      ),
-    );
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7.0),
+              ))),
+          child: Text('Continue'),
+          onPressed: () {
+            hubip = ipController.text;
+            hubport = portController.text;
+            setPrefs();
+            if (ipController.text.isEmpty || ipController.text.trim() == '') {
+              setState(() {
+                showIPError = true;
+                ipFieldErrorText = 'IP address cannot be empty';
+              });
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WebApp()),
+              );
+            }
+          },
+        ));
   }
 }
