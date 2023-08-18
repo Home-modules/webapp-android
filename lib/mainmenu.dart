@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, camel_case_types, avoid_print, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers
+// ignore_for_file: prefer_const_constructors, camel_case_types, avoid_print, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, sort_child_properties_last, sized_box_for_whitespace, avoid_unnecessary_containers, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -177,9 +177,12 @@ class _MainMenuState extends State<MainMenu> {
                   child: Padding(
                     padding: const EdgeInsets.all(15),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: Column(
@@ -335,29 +338,36 @@ class _GObuttonState extends State<GObutton> {
         width: double.infinity,
         child: ElevatedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                // If the button is pressed, return green, otherwise blue
-                if (states.contains(MaterialState.pressed)) {
-                  return Color.fromRGBO(4, 100, 255, 1);
-                }
-                if (states.contains(MaterialState.hovered)) {
-                  return Color.fromRGBO(3, 83, 216, 1); // rgb(3, 83, 216)
-                }
+            backgroundColor: MaterialStateProperty.resolveWith((states) {
+              // If the button is pressed, return green, otherwise blue
+              if (states.contains(MaterialState.pressed)) {
                 return Color.fromRGBO(4, 100, 255, 1);
-              }),
-              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.all(20.0),
-              ),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
+              }
+              if (states.contains(MaterialState.hovered)) {
+                return Color.fromRGBO(3, 83, 216, 1); // rgb(3, 83, 216)
+              }
+              return Color.fromRGBO(4, 100, 255, 1);
+            }),
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.all(20.0),
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(7.0),
-              ))),
-          child: Text('Continue'),
+              ),
+            ),
+          ),
+          child: Text(
+            'Continue',
+            style: TextStyle(fontSize: 25, fontFamily: 'RobotoBold'),
+          ),
           onPressed: () {
             hubip = ipController.text;
             hubport = portController.text;
             setPrefs();
-            if (ipController.text.isEmpty || ipController.text.trim() == '') {
+            if (ipController.text.isEmpty ||
+                ipController.text.trim() == '' ||
+                ipController.text == null) {
               setState(() {
                 showIPError = true;
                 ipFieldErrorText = 'IP address cannot be empty';
