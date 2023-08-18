@@ -27,10 +27,10 @@ bool isThisSecondLoad = false;
 // Styling Vars
 Radius inputfieldBorderOutter = Radius.circular(8);
 Radius inputfieldBorderInner = Radius.circular(0);
-EdgeInsets inputPadding = 
-  EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0);
+EdgeInsets inputPadding =
+    EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0);
 
-// Unused for now
+// Used to determine the maximum width
 int? phoneScreenWidth;
 int? phoneScreenHeight;
 void skiptoWebAppF(BuildContext context) async {
@@ -38,10 +38,6 @@ void skiptoWebAppF(BuildContext context) async {
     context,
     MaterialPageRoute(builder: (context) => const WebApp()),
   );
-}
-
-Future<void> ssk(BuildContext context) async {
-  skiptoWebAppF(context);
 }
 
 // Used for Checkbox stuff
@@ -78,7 +74,8 @@ class _MainMenuState extends State<MainMenu> {
           MaterialPageRoute(builder: (context) => WebApp()),
         );
 
-        alreadyWebApp = true;
+        alreadyWebApp =
+            true; // prevent infinite back and forth if webapp fetching fails
       }
     });
   }
@@ -127,14 +124,12 @@ class _MainMenuState extends State<MainMenu> {
         ],
       );
     }
-    // print(
-    //    'Screen Height: ${phoneScreenHeight}px, phone screen width: ${phoneScreenWidth}px');
 
+    // I don't think following code is even required
     loadStorage();
     getHTTPS();
     getHubIp();
     getHubPort();
-    getMsg();
     if (isThisFirstLoad == false && isThisSecondLoad == false) {
       setState(() {
         isHTTPS = isHTTPS;
@@ -159,76 +154,74 @@ class _MainMenuState extends State<MainMenu> {
         color: Colors.red,
       ),
       child: Scaffold(
-          resizeToAvoidBottomInset:
-              false, // overlays keyboards instead of pushing the screen
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
+        resizeToAvoidBottomInset:
+            false, // overlays keyboards instead of pushing the screen
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      'Where is the hub?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 40, fontFamily: 'RobotoBold'),
+                    ))),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Container(
+                width: min(phoneScreenWidth! - 30, 400),
+                child: DecoratedBox(
+                  decoration: boxDecoration!,
                   child: Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        'Where is the hub?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 40, fontFamily: 'Roboto'),
-                      ))),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Container(
-                    width: min(phoneScreenWidth! - 30, 400),
-                    child: DecoratedBox(
-                        decoration: boxDecoration!,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text("IP Address"),
-                                          Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 5.0),
-                                            child: HubIPinput(),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 80,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Port"),
-                                          HubPORTinput(),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                  child: Wrap(
-                                    crossAxisAlignment: WrapCrossAlignment.center,
-                                    children: [
-                                      isHTTPSinput(), 
-                                      Text('Use HTTPS')
-                                    ],
-                                  )
-                                ),
-                                GObutton()
-                              ]),
-                        ))),
-              )
-            ],
-          )),
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("IP Address"),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 5.0),
+                                    child: HubIPinput(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 80,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Port"),
+                                  HubPORTinput(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [isHTTPSinput(), Text('Use HTTPS')],
+                          ),
+                        ),
+                        GObutton()
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
@@ -244,26 +237,26 @@ class HubIPinputState_ extends State<HubIPinput> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: inputfieldBorderOutter,
-                  bottomLeft: inputfieldBorderOutter,
-                  bottomRight: inputfieldBorderInner,
-                  topRight: inputfieldBorderInner)),
-          //labelText: 'Hub IP',
-          hintText: 'Enter IP',
-          errorMaxLines: 3,
-          errorText: showIPError ? ipFieldErrorText : null,
-          contentPadding: inputPadding,
-          //icon: Icon(Icons.account_tree_sharp),
-          // iconColor: Colors.blueAccent,
-        ),
-        controller: ipController,
-        autocorrect: false,
-        onSubmitted: (String value) async {
-          hubip = value;
-        },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: inputfieldBorderOutter,
+                bottomLeft: inputfieldBorderOutter,
+                bottomRight: inputfieldBorderInner,
+                topRight: inputfieldBorderInner)),
+        //labelText: 'Hub IP',
+        hintText: 'Enter IP',
+        errorMaxLines: 3,
+        errorText: showIPError ? ipFieldErrorText : null,
+        contentPadding: inputPadding,
+        //icon: Icon(Icons.account_tree_sharp),
+        // iconColor: Colors.blueAccent,
+      ),
+      controller: ipController,
+      autocorrect: false,
+      onSubmitted: (String value) async {
+        hubip = value;
+      },
     );
   }
 }
@@ -279,27 +272,27 @@ class _HubPORTinputState extends State<HubPORTinput> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.only(
-                  topRight: inputfieldBorderOutter,
-                  bottomRight: inputfieldBorderOutter,
-                  bottomLeft: inputfieldBorderInner,
-                  topLeft: inputfieldBorderInner),
-            ),
-            //labelText: 'Hub Port',
-            hintText: 'Enter Port',
-            hintStyle: TextStyle(fontSize: 15),
-            errorMaxLines: 4,
-            contentPadding: inputPadding,
-            errorText: showPortError ? portFieldErrorText : null,
-          ),
-          controller: portController,
-          keyboardType: TextInputType.number,
-          onSubmitted: (String value) {
-            hubport = value;
-          },
-        );
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.only(
+              topRight: inputfieldBorderOutter,
+              bottomRight: inputfieldBorderOutter,
+              bottomLeft: inputfieldBorderInner,
+              topLeft: inputfieldBorderInner),
+        ),
+        //labelText: 'Hub Port',
+        hintText: 'Enter Port',
+        hintStyle: TextStyle(fontSize: 15),
+        errorMaxLines: 4,
+        contentPadding: inputPadding,
+        errorText: showPortError ? portFieldErrorText : null,
+      ),
+      controller: portController,
+      keyboardType: TextInputType.number,
+      onSubmitted: (String value) {
+        hubport = value;
+      },
+    );
   }
 }
 
